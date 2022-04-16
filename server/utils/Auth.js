@@ -1,3 +1,4 @@
+const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
@@ -72,6 +73,17 @@ const validate = async (crmUser, role, password, res) => {
   });
 };
 
+const crmUserAuth = passport.authenticate('jwt', { session: false });
+
+const filterCrmUser = (user) => {
+  return {
+    _id: user._id,
+    username: user.username,
+  }
+}
+
 module.exports = {
   crmUserLogin,
+  crmUserAuth,
+  filterCrmUser,
 };
