@@ -1,20 +1,21 @@
-const express = require("express");
 // cors is used to allow making requests from one 
 // website to another website in the browser
 const cors = require("cors");
+const express = require("express");
 const bodyParser = require("body-parser");
-require("dotenv").config();
-const PORT = process.env.PORT;
+
 const connect = require('./config/db');
+const { PORT } = require('./config/env');
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
 
-app.use('/ninjaco', require('./controllers/auth'));
+app.use('/auth', require('./routes/users'));
 
 connect().then(() => {
   app.listen(PORT, () => {
-    console.log(`App listening at http://localhost/${PORT}`);
+    console.log(`App listening at http://localhost:${PORT}`);
   });
 });
