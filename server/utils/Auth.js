@@ -67,7 +67,7 @@ const validate = async (crmUser, role, password, res) => {
     return res.status(200).json({
       ...result,
       success: true,
-      message: "OK",
+      message: "Access granted.",
     });
   });
 };
