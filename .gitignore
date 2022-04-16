@@ -1,4 +1,2 @@
 server/node_modules
 server/.env
-server/models
-server/test.js
