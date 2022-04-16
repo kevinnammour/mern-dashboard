@@ -15,8 +15,8 @@ const userLogin = async (credentials, res) => {
       
   } else {
       return res.status(404).json({
+          success: false,
           message: 'Username not found.',
-          success: false
       })
   }
 };
