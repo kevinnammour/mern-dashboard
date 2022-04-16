@@ -6,13 +6,13 @@ const Admin = require("../models/Admin");
 const Partner = require("../models/Partner");
 const { SECRET } = require("../config/env");
 
+const adminUsernameRegex =
+  /^(?=.{19,29}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])@ninjaco\.admin$/;
+const partnerUsernameRegex =
+  /^(?=.{21,31}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])@ninjaco\.partner$/;
+
 const crmUserLogin = async (credentials, res) => {
   let { username, password } = credentials;
-
-  let adminUsernameRegex =
-    /^(?=.{19,29}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])@ninjaco\.admin$/;
-  let partnerUsernameRegex =
-    /^(?=.{21,31}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])@ninjaco\.partner$/;
 
   // Username matches admin username or partner username
   if (adminUsernameRegex.test(username)) {
@@ -73,17 +73,28 @@ const validate = async (crmUser, role, password, res) => {
   });
 };
 
-const crmUserAuth = passport.authenticate('jwt', { session: false });
+const crmUserAuth = passport.authenticate("jwt", { session: false });
 
 const filterCrmUser = (user) => {
   return {
     _id: user._id,
     username: user.username,
+  };
+};
+
+const checkCrmUserRole = (permission) => (req, res, next) => {
+  let userRole;
+  if (adminUsernameRegex.test(req.user.username)) {
+    userRole = "Admin";
+  } else if (partnerUsernameRegex.test(req.user.username)) {
+    userRole = "Partner";
   }
-}
+  userRole === permission? next() : res.status(401).json("Unauthorized");
+};
 
 module.exports = {
   crmUserLogin,
   crmUserAuth,
   filterCrmUser,
+  checkCrmUserRole,
 };
