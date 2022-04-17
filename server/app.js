@@ -16,6 +16,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(errorHandler);
 
+// Routes
+app.use('/auth', require('./routes/crmUsers'));
+
 connect().then(() => {
   app.listen(PORT, () => {
     console.log(`App listening at http://localhost:${PORT}`);
