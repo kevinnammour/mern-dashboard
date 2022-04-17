@@ -17,7 +17,8 @@ app.use(express.json());
 app.use(errorHandler);
 
 // Routes
-app.use('/auth', require('./routes/crmUsers'));
+app.use('/protected', require('./routes/crmUsers'));
+app.use('/auth', require('./routes/auth'));
 
 connect().then(() => {
   app.listen(PORT, () => {
