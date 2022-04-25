@@ -1,4 +1,6 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const adminUsernameRegex =
   /^(?=.{19,29}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])@ninjaco\.admin$/;
@@ -44,16 +46,25 @@ const validateCrmUser = async (crmUser, role, password, res) => {
       });
     }
 
-    // If the password matches
-    let token = jwt.sign(
+    const accessToken = jwt.sign(
       {
         userId: crmUser._id,
-        username: crmUser.username,
         role,
       },
-      SECRET,
-      { expiresIn: "7 days" }
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "30s" }
     );
+
+    const refreshToken = jwt.sign(
+      {
+        userId: crmUser._id,
+        role,
+      },
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: "1d" }
+    );
+
+
 
     let result = {
       username: crmUser.username,
