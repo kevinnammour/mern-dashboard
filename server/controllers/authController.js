@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const Admin = require("../models/Admin");
+const Branch = require("../models/Branch");
 
 const adminUsernameRegex =
   /^(?=.{19,29}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])@ninjaco\.admin$/;
@@ -20,7 +22,7 @@ const handleLogin = async (req, res) => {
       validateCrmUser(admin, "Admin", password, res);
     });
   } else if (partnerUsernameRegex.test(username)) {
-    Partner.findOne({ username }).then((partner) => {
+    Branch.findOne({ username }).then((partner) => {
       validateCrmUser(partner, "Partner", password, res);
     });
   } else {
@@ -48,34 +50,29 @@ const validateCrmUser = async (crmUser, role, password, res) => {
 
     const accessToken = jwt.sign(
       {
-        userId: crmUser._id,
+        userId: crmUser._id.toString(),
         role,
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "30s" }
+      { expiresIn: "24h" }
     );
 
     const refreshToken = jwt.sign(
       {
-        userId: crmUser._id,
+        userId: crmUser._id.toString(),
         role,
       },
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "1d" }
     );
 
-
-
-    let result = {
-      username: crmUser.username,
-      role,
-      token: `Bearer ${token}`,
-      expiresIn: 168,
-    };
-    return res.status(200).json({
-      ...result,
-      success: true,
-      message: "Access granted.",
+    Object.assign(crmUser, { accessToken, refreshToken });
+    crmUser.save().then(() => {
+      res.cookie("jwt", refreshToken, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+      res.status(200).json({ accessToken });
     });
   });
 };

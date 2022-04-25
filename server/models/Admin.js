@@ -19,7 +19,7 @@ const adminSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      required: [true, "Please provide a username."],
+      required: true,
       trim: true,
       unique: true,
       // @regexExplanation -> @username
@@ -32,17 +32,18 @@ const adminSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide a password."],
       trim: true,
-      select: false,
     },
     accessToken: {
       type: String,
       trim: true,
       default: null,
+      unique: true,
     },
     refreshToken: {
       type: String,
       trim: true,
       default: null,
+      unique: true,
     },
   },
   {
