@@ -1,11 +1,39 @@
+/**
+ *
+ * @regexExplanation -> @adminUsername
+ *
+ *    The admin's username should match /^(?=.{19,29}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])@ninjaco\.admin$/
+ *
+ *    (?=.{19, 29}$)          means that the username should be 19-29 characters long. However, the user enters (5-15) characters because '@ninjaco.admin' is a suffix added by the system itself
+ *    (?![_.])                prevents the '_', or '.' character at the beginning of the username
+ *    (?!.*[_.]{2})           prevents __ or _. or similar mixtures of 2 or more characters next to each other
+ *    [a-zA-Z0-9._]           is the set of allowed characters, (lower/upper)case alphabet letters, and numbers
+ *    (?<![_.])               no _ or . at the end of a username
+ *    @ninjaco\.admin         means the username should end with '@ninjaco.admin'. Note that this suffix is added by the system itself
+ *
+ * @regexExplanation -> @partnerUsername
+ *
+ *    The partner's username should match /^(?=.{21,31}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])@ninjaco\.partner$/
+ *
+ *    (?=.{21, 31}$)          means that the username should be 21-31 characters long. However, the user enters (5-15) characters because '@ninjaco.partner' is a suffix added by the system itself
+ *    (?![_.])                prevents the '_', or '.' character at the beginning of the username
+ *    (?!.*[_.]{2})           prevents __ or _. or similar mixtures of 2 or more characters next to each other
+ *    [a-zA-Z0-9._]           is the set of allowed characters, (lower/upper)case alphabet letters, and numbers
+ *    (?<![_.])               no _ or . at the end of a username
+ *    @ninjaco\.partner         means the username should end with '@ninjaco.partner'. Note that this suffix is added by the system itself
+ */
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+
 const Admin = require("../models/Admin");
 const Branch = require("../models/Branch");
 
+// @regexExplanation -> @adminUsername
 const adminUsernameRegex =
   /^(?=.{19,29}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])@ninjaco\.admin$/;
+
+// @regexExplanation -> @partnerUsername
 const partnerUsernameRegex =
   /^(?=.{21,31}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])@ninjaco\.partner$/;
 
