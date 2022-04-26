@@ -25,7 +25,6 @@
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
 const Admin = require("../models/Admin");
 const Branch = require("../models/Branch");
 
@@ -37,6 +36,13 @@ const adminUsernameRegex =
 const partnerUsernameRegex =
   /^(?=.{21,31}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])@ninjaco\.partner$/;
 
+/**
+ *
+ * @param {*} req
+ * @param {*} res
+ * @task searches for the user based on the username entered, and pass it to validateCrmUser
+ * @returns accessToken returned by validateCrmUser if any
+ */
 const handleLogin = async (req, res) => {
   const { username, password } = req.body;
 
@@ -44,7 +50,6 @@ const handleLogin = async (req, res) => {
     res.status(400).json({ message: "Username or password missing!" });
   }
 
-  // Username matches admin username or partner username
   if (adminUsernameRegex.test(username)) {
     Admin.findOne({ username }).then((admin) => {
       validateCrmUser(admin, "Admin", password, res);
@@ -60,15 +65,22 @@ const handleLogin = async (req, res) => {
   }
 };
 
+/**
+ *
+ * @param {*} crmUser
+ * @param {*} role
+ * @param {*} password
+ * @param {*} res
+ * @returns If the user exists, and the password is correct, it returns the accessToken
+ */
 const validateCrmUser = async (crmUser, role, password, res) => {
-  // Admin or partner not found
+  // 404 Not found if username does not exist
   if (!crmUser) {
     return res.status(404).json({
       message: "Username does not exist!",
     });
   }
 
-  // Validating passwords
   bcrypt.compare(password, crmUser.password).then((match) => {
     if (!match) {
       return res.status(401).json({
@@ -82,13 +94,12 @@ const validateCrmUser = async (crmUser, role, password, res) => {
         role,
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "24h" }
+      { expiresIn: "900s" }
     );
 
     const refreshToken = jwt.sign(
       {
         userId: crmUser._id.toString(),
-        role,
       },
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "1d" }
@@ -98,9 +109,11 @@ const validateCrmUser = async (crmUser, role, password, res) => {
     crmUser.save().then(() => {
       res.cookie("jwt", refreshToken, {
         httpOnly: true,
+        // secure: true,
+        sameSite: "None",
         maxAge: 24 * 60 * 60 * 1000,
       });
-      res.status(200).json({ accessToken });
+      res.status(200).json({ accessToken, role });
     });
   });
 };

@@ -3,7 +3,7 @@ const Branch = require("../models/Branch");
 
 const handleLogout = async (req, res) => {
   const cookies = req.cookies;
-  if (!cookies?.jwt) return res.sendStatus(204); // No content
+  if (!cookies?.jwt) return res.sendStatus(204);
   const refreshToken = cookies.jwt;
 
   let crmUser = await Admin.findOne({ refreshToken });
@@ -14,16 +14,21 @@ const handleLogout = async (req, res) => {
   }
 
   if (!crmUser) {
-    res.clearCookie("jwt", { HttpOnly: true });
+    res.clearCookie("jwt", { HttpOnly: true, secure: true, sameSite: "None" });
     return res.sendStatus(204);
   }
 
   Object.assign(crmUser, { refreshToken: "" });
-  crmUser.save().then(() => {
-    // Set secure to true as well in production mode
-    res.clearCookie("jwt", { HttpOnly: true });
-    res.sendStatus(204);
-  });
+  crmUser
+    .save()
+    .then(() => {
+      res.clearCookie("jwt", {
+        HttpOnly: true,
+        // secure: true,
+        sameSite: "None",
+      });
+      res.sendStatus(204);
+    });
 };
 
 module.exports = handleLogout;

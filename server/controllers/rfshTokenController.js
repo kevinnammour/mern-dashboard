@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 const Admin = require("../models/Admin");
 const Branch = require("../models/Branch");
 
@@ -25,9 +24,9 @@ const handleRefreshToken = async (req, res) => {
         role,
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "24h" }
+      { expiresIn: "900s" }
     );
-    res.json({ accessToken });
+    res.json({ accessToken, role });
   });
 };
 
