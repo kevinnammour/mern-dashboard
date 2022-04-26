@@ -25,7 +25,7 @@ app.use("/crm", require("./routes/logout"));
 // This middleware should be place before protected routes only.
 app.use(jwtValidator);
 
-app.use("/crm/students", require("./routes/crmUsers"));
+app.use("/crm/branches", require("./routes/crmUsers"));
 
 app.use(errorHandler);
 
@@ -37,5 +37,5 @@ connectDB()
     });
   })
   .catch(() => {
-    console.log('MongoDB Atlas connection failed.');
+    console.log("MongoDB Atlas connection failed.");
   });

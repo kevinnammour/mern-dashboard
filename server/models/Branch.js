@@ -11,7 +11,7 @@
  *    (?<![_.])               no _ or . at the end of a username
  *    @ninjaco\.partner         means the username should end with '@ninjaco.partner'. Note that this suffix is added by the system itself
  *
- * @regexExplanation -> @partnerName
+ * @regexExplanation -> @branchAndPartnerName
  *
  *    The partner's name should match /^[\w'\-,.][^0-9_!¡?÷?¿\/\\+=@#$%ˆ&*(){}|~<>;:[\]]{1,}$/
  *
@@ -40,14 +40,17 @@ const branchSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide a password."],
       trim: true,
-      select: false,
     },
     name: {
       type: String,
       required: true,
       trim: true,
-      minlength: 3,
       unique: true,
+      // @regexExplanation -> @branchAndPartnerName
+      match: [
+        /^[\w'\-,.][^0-9_!¡?÷?¿\/\\+=@#$%ˆ&*(){}|~<>;:[\]]{1,}$/,
+        "Invalid branch name structure.",
+      ],
     },
     phoneNumber: {
       type: String,
@@ -58,7 +61,7 @@ const branchSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      // @regexExplanation -> @partnerName
+      // @regexExplanation -> @branchAndPartnerName
       match: [
         /^[\w'\-,.][^0-9_!¡?÷?¿\/\\+=@#$%ˆ&*(){}|~<>;:[\]]{1,}$/,
         "Invalid partner name structure.",
@@ -85,12 +88,14 @@ const branchSchema = new mongoose.Schema(
     accessToken: {
       type: String,
       trim: true,
-      default: null,
+      default: "",
+      unique: true,
     },
     refreshToken: {
       type: String,
       trim: true,
-      default: null,
+      default: "",
+      unique: true,
     },
   },
   {

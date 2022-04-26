@@ -28,6 +28,9 @@ const handleLogout = async (req, res) => {
         sameSite: "None",
       });
       res.sendStatus(204);
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };
 

@@ -106,15 +106,20 @@ const validateCrmUser = async (crmUser, role, password, res) => {
     );
 
     Object.assign(crmUser, { accessToken, refreshToken });
-    crmUser.save().then(() => {
-      res.cookie("jwt", refreshToken, {
-        httpOnly: true,
-        // secure: true,
-        sameSite: "None",
-        maxAge: 24 * 60 * 60 * 1000,
+    crmUser
+      .save()
+      .then(() => {
+        res.cookie("jwt", refreshToken, {
+          httpOnly: true,
+          // secure: true,
+          sameSite: "None",
+          maxAge: 24 * 60 * 60 * 1000,
+        });
+        res.status(200).json({ accessToken, role });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-      res.status(200).json({ accessToken, role });
-    });
   });
 };
 
