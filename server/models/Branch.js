@@ -89,13 +89,11 @@ const branchSchema = new mongoose.Schema(
       type: String,
       trim: true,
       default: "",
-      unique: true,
     },
     refreshToken: {
       type: String,
       trim: true,
       default: "",
-      unique: true,
     },
   },
   {

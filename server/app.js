@@ -25,7 +25,7 @@ app.use("/crm", require("./routes/logout"));
 // This middleware should be place before protected routes only.
 app.use(jwtValidator);
 
-app.use("/crm/branches", require("./routes/crmUsers"));
+app.use("/branches", require("./routes/branches"));
 
 app.use(errorHandler);
 

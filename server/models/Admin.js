@@ -36,14 +36,12 @@ const adminSchema = new mongoose.Schema(
     accessToken: {
       type: String,
       trim: true,
-      default: '',
-      unique: true,
+      default: "",
     },
     refreshToken: {
       type: String,
       trim: true,
-      default: '',
-      unique: true,
+      default: "",
     },
   },
   {

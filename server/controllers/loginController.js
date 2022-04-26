@@ -81,6 +81,8 @@ const validateCrmUser = async (crmUser, role, password, res) => {
     });
   }
 
+  console.log(password);
+
   bcrypt.compare(password, crmUser.password).then((match) => {
     if (!match) {
       return res.status(401).json({
@@ -94,7 +96,7 @@ const validateCrmUser = async (crmUser, role, password, res) => {
         role,
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "900s" }
+      { expiresIn: "3600s" }
     );
 
     const refreshToken = jwt.sign(
