@@ -3,27 +3,27 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
-const checkJWT = require("./middlewares/checkJWT");
+const jwtValidator = require("./middlewares/jwtValidator");
 const errorHandler = require("./middlewares/errorHandler");
 const corsOptions = require("./config/corsOptions");
 const connectDB = require("./config/connectDB");
-const handleCreds = require("./middlewares/handleCreds");
+const credsHandler = require("./middlewares/credsHandler");
 
 const PORT = process.env.PORT;
 const app = express();
 
-app.use(handleCreds);
+app.use(credsHandler);
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/crm", require("./routes/auth"));
+app.use("/crm", require("./routes/login"));
 app.use("/crm", require("./routes/refresh"));
 app.use("/crm", require("./routes/logout"));
 
 // This middleware should be place before protected routes only.
-app.use(checkJWT);
+app.use(jwtValidator);
 
 app.use("/crm/students", require("./routes/crmUsers"));
 

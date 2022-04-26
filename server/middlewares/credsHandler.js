@@ -1,6 +1,6 @@
 const whitelistedOrigins = require("../config/whitelistedOrigins");
 
-const handleCreds = (req, res, next) => {
+const credsHandler = (req, res, next) => {
   const origin = req.headers.origin;
   if (whitelistedOrigins.includes(origin)) {
     res.header("Access-Control-Allow-Credentials", true);
@@ -8,4 +8,4 @@ const handleCreds = (req, res, next) => {
   next();
 };
 
-module.exports = handleCreds;
+module.exports = credsHandler;

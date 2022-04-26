@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-
-const checkJWT = (req, res, next) => {
+const jwtValidator = (req, res, next) => {
     const authorizationHeader = req.headers['authorization'];
     if(!authorizationHeader) 
         return res.sendStatus(401);
@@ -11,12 +10,12 @@ const checkJWT = (req, res, next) => {
         token,
         process.env.ACCESS_TOKEN_SECRET,
         (err, decoded) => {
-            // forbidden
             if(err) return res.sendStatus(403);
-            req.user = decoded.username;
+            req.useriD = decoded.userId;
+            req.role = decoded.role;
             next();
         }
     )
 }
 
-module.exports = checkJWT;
+module.exports = jwtValidator;
