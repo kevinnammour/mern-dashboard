@@ -2,7 +2,7 @@ const router = require("express").Router();
 const branchesController = require("../controllers/branchesController");
 const rolesValidator = require("../middlewares/rolesValidator");
 
-router.get("/:id", rolesValidator("Admin"), branchesController.getBranch);
+router.route("/:id").get(rolesValidator("Admin"), branchesController.getBranch);
 
 router
   .route("/")

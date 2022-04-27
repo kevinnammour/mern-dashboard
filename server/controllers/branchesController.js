@@ -13,7 +13,6 @@ const getBranch = async (req, res) => {
       return res
         .status(204)
         .json({ message: `No branch with id = ${req.params.id}` });
-    delete branch.refreshToken;
     res.status(200).json(branch);
   });
 };

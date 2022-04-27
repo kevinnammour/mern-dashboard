@@ -3,23 +3,25 @@ const mongoose = require("mongoose");
 const invoiceSchema = new mongoose.Schema(
   {
     amount: {
-      type: double,
+      type: Number,
       required: true,
     },
     lbpRate: {
-      type: double,
+      type: Number,
     },
     datetime: {
-      type: date,
+      type: String,
       required: true,
     },
-    branchName: {
-      type: mongoose.SchemaTypes.ObjectId,
+    branchId: {
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Branch",
+      required: true,
     },
     studentId: {
-      type: mongoose.SchemaTypes.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Student",
+      required: true,
     },
   },
   {

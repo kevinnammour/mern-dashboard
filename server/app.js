@@ -26,6 +26,8 @@ app.use("/crm", require("./routes/logout"));
 app.use(jwtValidator);
 
 app.use("/branches", require("./routes/branches"));
+// app.use("/analytics", require("./routes/analytics"));
+app.use("/invoices", require("./routes/invoices"));
 
 app.use(errorHandler);
 

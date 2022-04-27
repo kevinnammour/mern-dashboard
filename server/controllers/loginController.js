@@ -36,13 +36,6 @@ const adminUsernameRegex =
 const partnerUsernameRegex =
   /^(?=.{21,31}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])@ninjaco\.partner$/;
 
-/**
- *
- * @param {*} req
- * @param {*} res
- * @task searches for the user based on the username entered, and pass it to validateCrmUser
- * @returns accessToken returned by validateCrmUser if any
- */
 const handleLogin = async (req, res) => {
   const { username, password } = req.body;
 
@@ -65,14 +58,6 @@ const handleLogin = async (req, res) => {
   }
 };
 
-/**
- *
- * @param {*} crmUser
- * @param {*} role
- * @param {*} password
- * @param {*} res
- * @returns If the user exists, and the password is correct, it returns the accessToken
- */
 const validateCrmUser = async (crmUser, role, password, res) => {
   // 404 Not found if username does not exist
   if (!crmUser) {
@@ -80,8 +65,6 @@ const validateCrmUser = async (crmUser, role, password, res) => {
       message: "Username does not exist!",
     });
   }
-
-  console.log(password);
 
   bcrypt.compare(password, crmUser.password).then((match) => {
     if (!match) {
