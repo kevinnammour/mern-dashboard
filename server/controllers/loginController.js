@@ -115,4 +115,4 @@ const validateCrmUser = async (crmUser, role, password, res) => {
   });
 };
 
-module.exports = handleLogin;
+module.exports = { handleLogin };

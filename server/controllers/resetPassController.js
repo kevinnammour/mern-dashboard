@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const Branch = require("../models/Branch");
 
-const resetPass = async (req, res) => {
+const handleResetPassword = async (req, res) => {
   if (!req?.body?.username || !req?.body?.password || !req?.body?.newPassword)
     return res.status(400).json({ message: "Some fields are missing." });
   Branch.findOne({ username: req.body.username }).then((branch) => {
@@ -36,4 +36,8 @@ const resetPass = async (req, res) => {
         });
     });
   });
+};
+
+module.exports = {
+  handleResetPassword,
 };

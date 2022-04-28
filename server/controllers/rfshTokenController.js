@@ -17,7 +17,8 @@ const handleRefreshToken = async (req, res) => {
   if (!crmUser) return res.sendStatus(403);
 
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
-    if (err || crmUser._id.toString() !== decoded.userId) return res.sendStatus(403);
+    if (err || crmUser._id.toString() !== decoded.userId)
+      return res.sendStatus(403);
     const accessToken = jwt.sign(
       {
         userId: crmUser._id.toString(),
@@ -30,4 +31,4 @@ const handleRefreshToken = async (req, res) => {
   });
 };
 
-module.exports = handleRefreshToken;
+module.exports = { handleRefreshToken };

@@ -18,9 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/crm", require("./routes/login"));
-app.use("/crm", require("./routes/refresh"));
-app.use("/crm", require("./routes/logout"));
+app.use("/crm", require("./routes/auth"));
 
 // This middleware should be place before protected routes only.
 app.use(jwtValidator);
