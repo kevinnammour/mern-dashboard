@@ -71,17 +71,21 @@ const updateBranchStatus = async (req, res) => {
   if (!req?.body?.id || (!req?.body?.active && req.body.active === undefined))
     return res.status(400).json({ message: "Branch id or status missing." });
 
-  Branch.findOne({ _id: req.body.id }).then((branch) => {
-    branch.active = req.body.active;
-    branch
-      .save()
-      .then(() => {
-        return res.sendStatus(200);
-      })
-      .catch((err) => {
-        return res.status(500).json({ message: err.message });
-      });
-  });
+  Branch.findOne({ _id: req.body.id })
+    .then((branch) => {
+      branch.active = req.body.active;
+      branch
+        .save()
+        .then(() => {
+          return res.sendStatus(200);
+        })
+        .catch((err) => {
+          return res.status(500).json({ message: err.message });
+        });
+    })
+    .catch((err) => {
+      return res.status(500).json({ message: err.message });
+    });
 };
 
 module.exports = {

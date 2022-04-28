@@ -106,8 +106,35 @@ const addStudent = async (req, res) => {
     });
 };
 
+const updateStudentStatus = async (req, res) => {
+  if (!req?.body?.id || (!req?.body?.active && req.body.active === undefined))
+    return res.status(400).json({ message: "Student id or status missing." });
+
+  Student.findOne({ _id: req.body.id })
+    .then((student) => {
+      student.active = req.body.active;
+      student
+        .save()
+        .then(() => {
+          return res.sendStatus(200);
+        })
+        .catch((err) => {
+          return res.status(500).json({ message: err.message });
+        });
+    })
+    .catch((err) => {
+      return res.status(500).json({ message: err.message });
+    });
+};
+
+const addStudentCertificate = async (req, res) => {
+  
+};
+
 module.exports = {
   getRequestedStudents,
   getBranchStudents,
   addStudent,
+  updateStudentStatus,
+  addStudentCertificate,
 };
