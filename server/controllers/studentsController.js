@@ -108,6 +108,6 @@ const addStudent = async (req, res) => {
 
 module.exports = {
   getRequestedStudents,
-  addStudent,
   getBranchStudents,
+  addStudent,
 };

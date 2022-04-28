@@ -8,7 +8,7 @@ router
 
 router
   .route("/")
-  .get(rolesValidator("Partner"), studentsController.getBranchStudents)
+  .get(rolesValidator("Partner"), studentsController.getBranchStudents())
   .post(studentsController.addStudent);
 
 module.exports = router;
