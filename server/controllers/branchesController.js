@@ -8,13 +8,17 @@ const getBranch = async (req, res) => {
   Branch.findOne(
     { _id: req.params.id },
     "-password -accessToken -refreshToken -createdAt -updatedAt -__v"
-  ).then((branch) => {
-    if (!branch)
-      return res
-        .status(204)
-        .json({ message: `No branch with id = ${req.params.id}` });
-    return res.status(200).json(branch);
-  });
+  )
+    .then((branch) => {
+      if (!branch)
+        return res
+          .status(404)
+          .json({ message: `No branch with id = ${req.params.id}.` });
+      return res.status(200).json(branch);
+    })
+    .catch((err) => {
+      return res.status(500).json({ message: err.message });
+    });
 };
 
 const addBranch = async (req, res) => {
@@ -30,7 +34,7 @@ const addBranch = async (req, res) => {
     return res.status(400).json({ message: "Some fields are missing." });
 
   bcrypt
-    .hash(req.body.password, process.env.SALT)
+    .hash(req.body.password, 10)
     .then((hash) => {
       const branch = new Branch({
         username: req.body.username,

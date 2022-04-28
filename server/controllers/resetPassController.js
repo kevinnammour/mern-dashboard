@@ -13,8 +13,13 @@ const handleResetPassword = async (req, res) => {
       if (!match) {
         return res.status(401).json({ message: "Incorrect password." });
       }
+      if (!branch.firstLogin) {
+        return res
+          .status(400)
+          .json({ message: "Reset password not allowed." });
+      }
       bcrypt
-        .hash(req.body.newPassword, process.env.SALT)
+        .hash(req.body.newPassword, 10)
         .then((hash) => {
           branch.password = hash;
           branch.firstLogin = false;

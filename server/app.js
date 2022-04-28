@@ -24,6 +24,7 @@ app.use("/crm", require("./routes/auth"));
 app.use(jwtValidator);
 
 app.use("/branches", require("./routes/branches"));
+app.use("/students", require("./routes/students"));
 // app.use("/analytics", require("./routes/analytics"));
 // app.use("/invoices", require("./routes/invoices"));
 
