@@ -13,7 +13,7 @@ const getBranch = async (req, res) => {
       return res
         .status(204)
         .json({ message: `No branch with id = ${req.params.id}` });
-    res.status(200).json(branch);
+    return res.status(200).json(branch);
   });
 };
 
@@ -27,7 +27,7 @@ const addBranch = async (req, res) => {
     !req?.body?.locationUrl ||
     !req?.body?.percentage
   )
-    res.status(400).json({ message: "Some fields are missing." });
+    return res.status(400).json({ message: "Some fields are missing." });
 
   bcrypt.hash(req.body.password, 10, (err, hash) => {
     const branch = new Branch({
@@ -41,14 +41,16 @@ const addBranch = async (req, res) => {
     });
     branch
       .save()
-      .then(() => res.sendStatus(201))
+      .then(() => {
+        return res.sendStatus(201);
+      })
       .catch((err) => {
         if (err.code === 11000) {
-          res.status(409).json({
+          return res.status(409).json({
             message: "Username, branch name, or location url already exists.",
           });
         } else {
-          res.status(500).json({ message: err.message });
+          return res.status(500).json({ message: err.message });
         }
       });
   });
@@ -56,17 +58,17 @@ const addBranch = async (req, res) => {
 
 const updateBranchStatus = async (req, res) => {
   if (!req?.body?.id || (!req?.body?.active && req.body.active === undefined))
-    res.status(400).json({ message: "Branch id or status required." });
+    return res.status(400).json({ message: "Branch id or status missing." });
 
   Branch.findOne({ _id: req.body.id }).then((branch) => {
     branch.active = req.body.active;
     branch
       .save()
       .then(() => {
-        res.sendStatus(200);
+        return res.sendStatus(200);
       })
       .catch((err) => {
-        res.status(500).json({ message: err.message });
+        return res.status(500).json({ message: err.message });
       });
   });
 };

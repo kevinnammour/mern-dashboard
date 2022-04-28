@@ -27,10 +27,12 @@ const handleLogout = async (req, res) => {
         // secure: true,
         sameSite: "None",
       });
-      res.sendStatus(204);
+      return res.sendStatus(204);
     })
     .catch((err) => {
-      console.log(err);
+      return res
+        .status(500)
+        .json({ message: "Internal Server Error: Could not save user." });
     });
 };
 

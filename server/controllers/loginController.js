@@ -40,7 +40,7 @@ const handleLogin = async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
-    res.status(400).json({ message: "Username or password missing!" });
+    return res.status(400).json({ message: "Username or password missing." });
   }
 
   if (adminUsernameRegex.test(username)) {
@@ -48,12 +48,12 @@ const handleLogin = async (req, res) => {
       validateCrmUser(admin, "Admin", password, res);
     });
   } else if (partnerUsernameRegex.test(username)) {
-    Branch.findOne({ username }).then((partner) => {
-      validateCrmUser(partner, "Partner", password, res);
+    Branch.findOne({ username }).then((branch) => {
+      validateCrmUser(branch, "Partner", password, res);
     });
   } else {
     return res.status(404).json({
-      message: "Username does not exist!",
+      message: "Username does not exist.",
     });
   }
 };
@@ -62,14 +62,19 @@ const validateCrmUser = async (crmUser, role, password, res) => {
   // 404 Not found if username does not exist
   if (!crmUser) {
     return res.status(404).json({
-      message: "Username does not exist!",
+      message: "Username does not exist.",
     });
+  }
+
+  // If the partner signed for the first time, they need to reset their password
+  if (role === "Partner" && crmUser.firstLogin) {
+    return res.status(205).json({ message: "User needs to reset password." });
   }
 
   bcrypt.compare(password, crmUser.password).then((match) => {
     if (!match) {
       return res.status(401).json({
-        message: "Incorrect password!",
+        message: "Incorrect password.",
       });
     }
 
@@ -100,10 +105,12 @@ const validateCrmUser = async (crmUser, role, password, res) => {
           sameSite: "None",
           maxAge: 24 * 60 * 60 * 1000,
         });
-        res.status(200).json({ accessToken, role });
+        return res.status(200).json({ accessToken, role });
       })
       .catch((err) => {
-        console.log(err);
+        return res
+          .status(500)
+          .json({ message: "Internal Server Error: Could not save user." });
       });
   });
 };
