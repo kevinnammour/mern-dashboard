@@ -14,7 +14,7 @@ const handleResetPassword = async (req, res) => {
         return res.status(401).json({ message: "Incorrect password." });
       }
       bcrypt
-        .hash(req.body.newPassword, 10)
+        .hash(req.body.newPassword, process.env.SALT)
         .then((hash) => {
           branch.password = hash;
           branch.firstLogin = false;

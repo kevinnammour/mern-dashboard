@@ -29,31 +29,38 @@ const addBranch = async (req, res) => {
   )
     return res.status(400).json({ message: "Some fields are missing." });
 
-  bcrypt.hash(req.body.password, 10, (err, hash) => {
-    const branch = new Branch({
-      username: req.body.username,
-      password: hash,
-      name: req.body.name,
-      phoneNumber: req.body.phoneNumber,
-      partnerName: req.body.partnerName,
-      percentage: req.body.percentage,
-      locationUrl: req.body.locationUrl,
-    });
-    branch
-      .save()
-      .then(() => {
-        return res.sendStatus(201);
-      })
-      .catch((err) => {
-        if (err.code === 11000) {
-          return res.status(409).json({
-            message: "Username, branch name, or location url already exists.",
-          });
-        } else {
-          return res.status(500).json({ message: err.message });
-        }
+  bcrypt
+    .hash(req.body.password, process.env.SALT)
+    .then((hash) => {
+      const branch = new Branch({
+        username: req.body.username,
+        password: hash,
+        name: req.body.name,
+        phoneNumber: req.body.phoneNumber,
+        partnerName: req.body.partnerName,
+        percentage: req.body.percentage,
+        locationUrl: req.body.locationUrl,
       });
-  });
+      branch
+        .save()
+        .then(() => {
+          return res.sendStatus(201);
+        })
+        .catch((err) => {
+          if (err.code === 11000) {
+            return res.status(409).json({
+              message: "Username, branch name, or location url already exists.",
+            });
+          } else {
+            return res.status(500).json({ message: err.message });
+          }
+        });
+    })
+    .catch((err) => {
+      return res
+        .status(500)
+        .json({ message: "Internal Server Error: Could not hash password." });
+    });
 };
 
 const updateBranchStatus = async (req, res) => {
