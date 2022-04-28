@@ -1,12 +1,19 @@
 const router = require("express").Router();
 const branchesController = require("../controllers/branchesController");
 const rolesValidator = require("../middlewares/rolesValidator");
+const jwtValidator = require("../middlewares/jwtValidator");
 
-router.route("/:id").get(rolesValidator("Admin"), branchesController.getBranch);
+router
+  .route("/:id")
+  .get(jwtValidator, rolesValidator("Admin"), branchesController.getBranch);
 
 router
   .route("/")
-  .post(rolesValidator("Admin"), branchesController.addBranch)
-  .put(rolesValidator("Admin"), branchesController.updateBranchStatus);
+  .post(jwtValidator, rolesValidator("Admin"), branchesController.addBranch)
+  .put(
+    jwtValidator,
+    rolesValidator("Admin"),
+    branchesController.updateBranchStatus
+  );
 
 module.exports = router;

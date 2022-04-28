@@ -1,22 +1,23 @@
 const router = require("express").Router();
 const studentsController = require("../controllers/studentsController");
 const rolesValidator = require("../middlewares/rolesValidator");
+const jwtValidator = require("../middlewares/jwtValidator");
 
 router
   .route("/:id")
-  .get(rolesValidator("Admin"), studentsController.getRequestedStudents);
+  .get(jwtValidator, rolesValidator("Admin"), studentsController.getRequestedStudents);
 
 router
   .route("/")
-  .get(rolesValidator("Partner"), studentsController.getBranchStudents)
-  .post(studentsController.addStudent);
+  .get(jwtValidator, rolesValidator("Partner"), studentsController.getBranchStudents)
+  .post(jwtValidator, studentsController.addStudent);
 
 router
   .route("/set-status")
-  .put(rolesValidator("Admin"), studentsController.updateStudentStatus);
+  .put(jwtValidator, rolesValidator("Admin"), studentsController.updateStudentStatus);
 
 router
   .route("/add-certificate")
-  .post(rolesValidator("Admin"), studentsController.addStudentCertificate);
+  .post(jwtValidator, rolesValidator("Admin"), studentsController.addStudentCertificate);
 
 module.exports = router;

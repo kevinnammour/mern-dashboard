@@ -3,7 +3,6 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
-const jwtValidator = require("./middlewares/jwtValidator");
 const errorHandler = require("./middlewares/errorHandler");
 const corsOptions = require("./config/corsOptions");
 const connectDB = require("./config/connectDB");
@@ -19,10 +18,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/crm", require("./routes/auth"));
-
-// This middleware should be place before protected routes only.
-app.use(jwtValidator);
-
+app.use("/inquiries", require("./routes/inquiries"));
 app.use("/branches", require("./routes/branches"));
 app.use("/students", require("./routes/students"));
 // app.use("/analytics", require("./routes/analytics"));

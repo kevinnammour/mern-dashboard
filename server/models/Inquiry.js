@@ -1,20 +1,20 @@
 const mongoose = require("mongoose");
-const { boolean } = require("webidl-conversions"); //what is this
 
 const inquirySchema = new mongoose.Schema(
   {
     fullName: {
       type: String,
       required: true,
-      minlength: 3,
       trim: true,
+      match: [
+        /^[\w'\-,.][^0-9_!¡?÷?¿\/\\+=@#$%ˆ&*(){}|~<>;:[\]]{1,}$/,
+        "Invalid user name structure.",
+      ],
     },
     phoneNumber: {
       type: String,
       required: true,
       trim: true,
-      unique: true,
-      minlength: 6,
     },
     message: {
       type: String,
@@ -23,12 +23,13 @@ const inquirySchema = new mongoose.Schema(
       trim: true,
     },
     type: {
-      type: boolean,
+      type: String,
+      enum: ['General', "Partnership"],
       required: true,
     },
     isSolved: {
-      type: boolean,
-      required: true,
+      type: Boolean,
+      default: false,
     },
   },
   {
@@ -37,5 +38,4 @@ const inquirySchema = new mongoose.Schema(
 );
 
 const Inquiry = mongoose.model("Inquiry", inquirySchema);
-
 module.exports = Inquiry;
