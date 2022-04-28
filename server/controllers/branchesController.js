@@ -73,15 +73,13 @@ const updateBranchStatus = async (req, res) => {
 
   Branch.findOne({ _id: req.body.id })
     .then((branch) => {
+      if (!branch) {
+        return res.status(400).json({ message: "Student not found." });
+      }
       branch.active = req.body.active;
-      branch
-        .save()
-        .then(() => {
-          return res.sendStatus(200);
-        })
-        .catch((err) => {
-          return res.status(500).json({ message: err.message });
-        });
+      branch.save().then(() => {
+        return res.sendStatus(200);
+      });
     })
     .catch((err) => {
       return res.status(500).json({ message: err.message });

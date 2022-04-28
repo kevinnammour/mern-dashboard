@@ -17,6 +17,6 @@ router
 
 router
   .route("/add-certificate")
-  .put(rolesValidator("Admin"), studentsController.addStudentCertificate);
+  .post(rolesValidator("Admin"), studentsController.addStudentCertificate);
 
 module.exports = router;

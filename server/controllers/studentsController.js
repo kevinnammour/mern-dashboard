@@ -112,15 +112,13 @@ const updateStudentStatus = async (req, res) => {
 
   Student.findOne({ _id: req.body.id })
     .then((student) => {
+      if (!student) {
+        return res.status(400).json({ message: "Student not found." });
+      }
       student.active = req.body.active;
-      student
-        .save()
-        .then(() => {
-          return res.sendStatus(200);
-        })
-        .catch((err) => {
-          return res.status(500).json({ message: err.message });
-        });
+      student.save().then(() => {
+        return res.sendStatus(200);
+      });
     })
     .catch((err) => {
       return res.status(500).json({ message: err.message });
@@ -128,7 +126,28 @@ const updateStudentStatus = async (req, res) => {
 };
 
 const addStudentCertificate = async (req, res) => {
-  
+  if (!req?.body?.id || !req?.body?.certificateName)
+    return res
+      .status(400)
+      .json({ message: "Student id or certificate missing." });
+
+  Student.findOne({ _id: req.body.id })
+    .then((student) => {
+      if (!student) {
+        return res.status(400).json({ message: "Student not found." });
+      }
+      var ts = new Date().getTime();
+      let earnedAt = new Date(ts).toLocaleString("en-US", {
+        timeZone: "Asia/Beirut",
+      });
+      student.certificates.push({ name: req.body.certificateName, earnedAt });
+      student.save().then(() => {
+        return res.sendStatus(201);
+      });
+    })
+    .catch((err) => {
+      return res.status(500).json({ message: err.message });
+    });
 };
 
 module.exports = {
