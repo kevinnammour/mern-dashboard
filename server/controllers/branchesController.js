@@ -1,19 +1,25 @@
 const Branch = require("../models/Branch");
 const bcrypt = require("bcrypt");
 
+/**
+ *
+ * @param {Request} req includes the params of the request
+ * @param {Response} res response to be returned
+ * @returns json object containing the branch if found, and the status code
+ */
 const getBranch = async (req, res) => {
-  if (!req?.params?.id)
+  if (!req?.params?.branchId)
     return res.status(400).json({ message: "Branch id required." });
 
   Branch.findOne(
-    { _id: req.params.id },
+    { _id: req.params.branchId },
     "-password -accessToken -refreshToken -createdAt -updatedAt -__v"
   )
     .then((branch) => {
       if (!branch)
         return res
           .status(404)
-          .json({ message: `No branch with id = ${req.params.id}.` });
+          .json({ message: `No branch with id = ${req.params.branchId}.` });
       return res.status(200).json(branch);
     })
     .catch((err) => {
@@ -21,6 +27,12 @@ const getBranch = async (req, res) => {
     });
 };
 
+/**
+ *
+ * @param {Request} req includes the body of the request
+ * @param {Response} res response to be returned
+ * @returns the status code indicating if the branch was added, or if some error occured with the appropriate message.
+ */
 const addBranch = async (req, res) => {
   if (
     !req?.body?.username ||
@@ -33,6 +45,13 @@ const addBranch = async (req, res) => {
   )
     return res.status(400).json({ message: "Some fields are missing." });
 
+  if (
+    !/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(
+      req.body.password
+    )
+  ) {
+    return res.status(400).json({ message: "Password structure is weak." });
+  }
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => {
@@ -61,25 +80,38 @@ const addBranch = async (req, res) => {
         });
     })
     .catch((err) => {
-      return res
-        .status(500)
-        .json({ message: "Internal Server Error: Could not hash password." });
+      return res.status(500).json({ message: err.message });
     });
 };
 
+/**
+ *
+ * @param {Request} req includes the body of the request
+ * @param {Response} res response to be returned
+ * @returns the status code indicating if the branch status 
+ * was updated, or if some error occured with the appropriate message.
+ */
 const updateBranchStatus = async (req, res) => {
-  if (!req?.body?.id || (!req?.body?.active && req.body.active === undefined))
+  if (
+    !req?.body?.branchId ||
+    (!req?.body?.active && req.body.active === undefined)
+  )
     return res.status(400).json({ message: "Branch id or status missing." });
 
-  Branch.findOne({ _id: req.body.id })
+  Branch.findOne({ _id: req.body.branchId })
     .then((branch) => {
       if (!branch) {
-        return res.status(400).json({ message: "Student not found." });
+        return res.status(400).json({ message: "Branch not found." });
       }
       branch.active = req.body.active;
-      branch.save().then(() => {
-        return res.sendStatus(200);
-      });
+      branch
+        .save()
+        .then(() => {
+          return res.sendStatus(200);
+        })
+        .catch((err) => {
+          return res.status(500).json({ message: err.message });
+        });
     })
     .catch((err) => {
       return res.status(500).json({ message: err.message });
