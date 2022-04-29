@@ -96,7 +96,7 @@ const updateBranchStatus = async (req, res) => {
     !req?.body?.branchId ||
     (!req?.body?.active && req.body.active === undefined)
   )
-    return res.status(400).json({ message: "Branch id or status missing." });
+    return res.status(400).json({ message: "Branch id or status required." });
 
   Branch.findOne({ _id: req.body.branchId })
     .then((branch) => {
