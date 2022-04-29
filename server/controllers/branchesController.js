@@ -13,7 +13,7 @@ const getBranch = async (req, res) => {
 
   Branch.findOne(
     { _id: req.params.branchId },
-    "-password -accessToken -refreshToken -createdAt -updatedAt -__v"
+    "-password -firstLogin -accessToken -refreshToken -createdAt -updatedAt -__v"
   )
     .then((branch) => {
       if (!branch)
@@ -88,7 +88,7 @@ const addBranch = async (req, res) => {
  *
  * @param {Request} req includes the body of the request
  * @param {Response} res response to be returned
- * @returns the status code indicating if the branch status 
+ * @returns the status code indicating if the branch status
  * was updated, or if some error occured with the appropriate message.
  */
 const updateBranchStatus = async (req, res) => {
