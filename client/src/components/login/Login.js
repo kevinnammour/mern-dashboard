@@ -1,11 +1,14 @@
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
-import { useRef, useState, useEffect, useContext } from "react";
-import AuthContext from "../../contexts/AuthProvider";
+import { useRef, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 import axios from "axios";
 const baseUrl = "http://localhost:8000";
 
 const Login = () => {
-  const setAuth = useContext(AuthContext).setAuth;
+  const navigate = useNavigate();
+
+  const { setAuth } = useAuth();
   const userRef = useRef();
   const errRef = useRef();
 
@@ -13,7 +16,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [errMessage, setErrMessage] = useState("");
-  const [success, setSuccess] = useState(false);
   const [reset, setReset] = useState(false);
 
   useEffect(() => {
@@ -76,13 +78,17 @@ const Login = () => {
         }
       );
       const accessToken = res?.data?.accessToken;
-      const role = res.config.data?.role;
+      const role = res?.data?.role;
       setAuth({ username, password, role, accessToken });
       setUsername("");
       setPassword("");
       setNewPassword("");
       setReset(false);
-      setSuccess(true);
+      if (role === "Admin") {
+        navigate("/analytics");
+      } else if (role === "Partner") {
+        navigate("/students");
+      }
     } catch (err) {
       if (!err?.response) {
         setErrMessage("Server error.");
@@ -102,88 +108,78 @@ const Login = () => {
 
   return (
     <>
-      {success ? (
-        <section>
-          <h1>You are logged in!</h1>
-          <br />
-          <p>
-            <a>Go to home</a>
-          </p>
-        </section>
-      ) : (
-        <Container className="padding">
-          <Row className="mt-5">
-            <Col
-              lg={5}
-              md={6}
-              sm={12}
-              className="p-4 m-auto rounded-lg box-shadow"
-            >
-              <h3 className="margin-bottom">NinjaCo's CRM panel</h3>
-              <Form onSubmit={handleSubmit}>
-                <p
-                  ref={errRef}
-                  className={errMessage ? "error" : "display-none"}
-                  aria-live="assertive"
-                >
-                  {errMessage}
-                </p>
-                <Form.Group controlId="formBasicEmail">
-                  <Form.Label>Username</Form.Label>
-                  <Form.Control
-                    className="no-outline"
-                    type="text"
-                    placeholder="Enter username"
-                    ref={userRef}
-                    autoComplete="off"
-                    onChange={(e) => setUsername(e.target.value)}
-                    value={username}
-                    required
-                  />
-                </Form.Group>
-                <br />
-                <Form.Group controlId="formBasicPassword">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    className="no-outline"
-                    type="password"
-                    placeholder="Enter password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}
-                    required
-                  />
-                </Form.Group>
-                <br />
-                {reset ? (
-                  <>
-                    <Form.Group controlId="formBasicNewPassword">
-                      <Form.Label>New Password</Form.Label>
-                      <Form.Control
-                        className="no-outline"
-                        type="password"
-                        placeholder="Enter new password"
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        value={newPassword}
-                        required
-                      />
-                    </Form.Group>
-                    <br />
-                  </>
-                ) : (
-                  <></>
-                )}
-                <Button
-                  className="w-100 btn-custom"
-                  variant="btn-block"
-                  type="submit"
-                >
-                  {reset ? "Reset password" : "Login"}
-                </Button>
-              </Form>
-            </Col>
-          </Row>
-        </Container>
-      )}
+      <Container className="padding">
+        <Row className="mt-5">
+          <Col
+            lg={5}
+            md={6}
+            sm={12}
+            className="p-4 m-auto rounded-lg box-shadow"
+          >
+            <h3 className="margin-bottom">NinjaCo's CRM panel</h3>
+            <Form onSubmit={handleSubmit}>
+              <p
+                ref={errRef}
+                className={errMessage ? "error" : "display-none"}
+                aria-live="assertive"
+              >
+                {errMessage}
+              </p>
+              <Form.Group controlId="formBasicEmail">
+                <Form.Label>Username</Form.Label>
+                <Form.Control
+                  className="no-outline"
+                  type="text"
+                  placeholder="Enter username"
+                  ref={userRef}
+                  autoComplete="off"
+                  onChange={(e) => setUsername(e.target.value)}
+                  value={username}
+                  required
+                />
+              </Form.Group>
+              <br />
+              <Form.Group controlId="formBasicPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  className="no-outline"
+                  type="password"
+                  placeholder="Enter password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                  required
+                />
+              </Form.Group>
+              <br />
+              {reset ? (
+                <>
+                  <Form.Group controlId="formBasicNewPassword">
+                    <Form.Label>New Password</Form.Label>
+                    <Form.Control
+                      className="no-outline"
+                      type="password"
+                      placeholder="Enter new password"
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      value={newPassword}
+                      required
+                    />
+                  </Form.Group>
+                  <br />
+                </>
+              ) : (
+                <></>
+              )}
+              <Button
+                className="w-100 btn-custom"
+                variant="btn-block"
+                type="submit"
+              >
+                {reset ? "Reset password" : "Login"}
+              </Button>
+            </Form>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 };

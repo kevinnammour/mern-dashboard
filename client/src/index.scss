@@ -1,9 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 $dark-blue: #29375b;
 $dark-blue-opacity: #29375bde;
+$yellow: #fad85d;
+$yellow-opacity: #fad85df2;
 
 * {
   font-family: "Poppins";
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.darkblue-bg {
+  background-color: $dark-blue !important;
 }
 
 .btn-custom {
@@ -30,4 +40,8 @@ $dark-blue-opacity: #29375bde;
 
 .error {
   color: red;
+}
+
+.active {
+  color: white;
 }
