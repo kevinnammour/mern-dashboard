@@ -2,8 +2,7 @@ import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { useRef, useState, useEffect, useContext } from "react";
 import AuthContext from "../../contexts/AuthProvider";
 import axios from "axios";
-const LOGIN_URL = "http://localhost:8000/crm/login";
-const RESET_PASS_URL = "http://localhost:8000/crm/reset-pass";
+const baseUrl = "http://localhost:8000";
 
 const Login = () => {
   const setAuth = useContext(AuthContext).setAuth;
@@ -27,11 +26,22 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // If the partner tried to log in earlier and they were forced to reset their password
     if (reset) {
+      if (
+        !/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(
+          newPassword
+        )
+      ) {
+        setErrMessage(
+          "The new password must have 1 upper letter, 1 lower letter, 1 symbol, 1 number, and have at least 8 characters."
+        );
+        return;
+      }
       try {
-        console.log(JSON.stringify({ username, password, newPassword }));
         await axios.put(
-          RESET_PASS_URL,
+          `${baseUrl}/crm/reset-pass`,
           JSON.stringify({ username, password, newPassword }),
           {
             headers: { "Content-Type": "application/json" },
@@ -41,10 +51,16 @@ const Login = () => {
       } catch (err) {
         if (!err?.response) {
           setErrMessage("Server error.");
+        } else if (err.response?.status === 400) {
+          setErrMessage("Password is weak.");
         } else if (err.response?.status === 401) {
           setErrMessage("Incorrect password.");
         } else if (err.response?.status === 404) {
           setErrMessage("Username not found.");
+        } else if (err.response?.status === 405) {
+          setErrMessage("Reset password not allowed.");
+        } else if (err.response?.status === 500) {
+          setErrMessage("Server error.");
         }
         return;
       }
@@ -52,7 +68,7 @@ const Login = () => {
     const pass = reset ? newPassword : password;
     try {
       const res = await axios.post(
-        LOGIN_URL,
+        `${baseUrl}/crm/login`,
         JSON.stringify({ username, password: pass }),
         {
           headers: { "Content-Type": "application/json" },
@@ -64,6 +80,8 @@ const Login = () => {
       setAuth({ username, password, role, accessToken });
       setUsername("");
       setPassword("");
+      setNewPassword("");
+      setReset(false);
       setSuccess(true);
     } catch (err) {
       if (!err?.response) {
@@ -75,6 +93,8 @@ const Login = () => {
       } else if (err.response?.status === 406) {
         setErrMessage("Password needs to be reset.");
         setReset(true);
+      } else if (err.response?.status === 500) {
+        setErrMessage("Server error.");
       }
       errRef.current.focus();
     }
@@ -87,7 +107,7 @@ const Login = () => {
           <h1>You are logged in!</h1>
           <br />
           <p>
-            <a href="#">Go to home</a>
+            <a>Go to home</a>
           </p>
         </section>
       ) : (
