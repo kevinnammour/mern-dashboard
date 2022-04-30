@@ -66,16 +66,17 @@ const validateCrmUser = async (crmUser, role, password, res) => {
     });
   }
 
-  // If the partner signed for the first time, they need to reset their password
-  if (role === "Partner" && crmUser.firstLogin) {
-    return res.status(205).json({ message: "User needs to reset password." });
-  }
-
   bcrypt.compare(password, crmUser.password).then((match) => {
     if (!match) {
       return res.status(401).json({
         message: "Incorrect password.",
       });
+    }
+
+    // If the partner entered the right password
+    // and are signing in for the first time, they need to reset their password
+    if (role === "Partner" && crmUser.firstLogin) {
+      return res.status(406).json({ message: "Password needs to be reset." });
     }
 
     const accessToken = jwt.sign(
@@ -101,16 +102,14 @@ const validateCrmUser = async (crmUser, role, password, res) => {
       .then(() => {
         res.cookie("jwt", refreshToken, {
           httpOnly: true,
-          // secure: true,
+          secure: true,
           sameSite: "None",
           maxAge: 24 * 60 * 60 * 1000,
         });
         return res.status(200).json({ accessToken, role });
       })
       .catch((err) => {
-        return res
-          .status(500)
-          .json({ message: "Internal Server Error: Could not save user." });
+        return res.status(500).json({ message: "Server error." });
       });
   });
 };
