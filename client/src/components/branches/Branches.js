@@ -2,9 +2,10 @@
 import Topbar from "../topbar/Topbar";
 import Dropdown from "../dropdown/Dropdown";
 import BranchInfo from "./BranchInfo";
+import useLogout from "../../hooks/useLogout";
 
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 const baseUrl = "http://localhost:8000";
 
@@ -13,6 +14,13 @@ const Branches = () => {
   const [selectedBranchId, setSelectedBranchId] = useState();
   const axiosJWTHolder = useAxiosJWTHolder();
   const navigate = useNavigate();
+
+  const logout = useLogout();
+
+  const signOut = async () => {
+    await logout();
+    navigate("/login");
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -55,6 +63,7 @@ const Branches = () => {
           active={branch?.active}
         />
       </div>
+      <button onClick={signOut}>Sign out</button>
     </>
   );
 };

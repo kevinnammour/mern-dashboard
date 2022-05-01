@@ -10,14 +10,15 @@ const useNewAccessToken = () => {
       withCredentials: true,
     });
     setAuth((prev) => {
-      // This is the previous state
-      console.log(JSON.stringify(prev));
-      console.log(res.data.accessToken);
-      return { ...prev, accessToken: res.data.accessToken };
+      return {
+        ...prev,
+        accessToken: res.data.accessToken,
+        role: res.data.role,
+      };
     });
     return res.data.accessToken;
   };
-  return  refresh;
+  return refresh;
 };
 
 export default useNewAccessToken;
