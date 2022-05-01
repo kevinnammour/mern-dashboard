@@ -1,5 +1,6 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 import {
   Collapse,
   Navbar,
@@ -16,6 +17,9 @@ const Topbar = (props) => {
 
   const toggle = () => setIsOpen(!isOpen);
 
+  const { auth } = useAuth();
+  const isAdmin = auth.role === "Admin";
+
   return (
     <div>
       <Navbar className="darkblue-bg" dark expand="md">
@@ -23,35 +27,35 @@ const Topbar = (props) => {
         <NavbarToggler onClick={toggle} animation="false" />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
+            {isAdmin ? (
+              <>
+                <NavItem>
+                  <NavLink
+                    className="pointer"
+                    onClick={() => {
+                      navigate("/analytics");
+                    }}
+                  >
+                    Analytics
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    className="pointer"
+                    onClick={() => {
+                      navigate("/branches");
+                    }}
+                  >
+                    Branches
+                  </NavLink>
+                </NavItem>
+              </>
+            ) : (
+              <></>
+            )}
             <NavItem>
               <NavLink
-                onClick={() => {
-                  navigate("/analytics");
-                }}
-              >
-                Analytics
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
-                onClick={() => {
-                  navigate("/branches");
-                }}
-              >
-                Branches
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
-                onClick={() => {
-                  navigate("/invoices");
-                }}
-              >
-                Invoices
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
+                className="pointer"
                 onClick={() => {
                   navigate("/students");
                 }}
@@ -61,6 +65,17 @@ const Topbar = (props) => {
             </NavItem>
             <NavItem>
               <NavLink
+                className="pointer"
+                onClick={() => {
+                  navigate("/invoices");
+                }}
+              >
+                Invoices
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className="pointer"
                 onClick={() => {
                   navigate("/attendances");
                 }}
@@ -68,15 +83,22 @@ const Topbar = (props) => {
                 Attendances
               </NavLink>
             </NavItem>
-            <NavItem>
-              <NavLink 
-                onClick={() => {
-                  navigate("/inquiries");
-                }}
-              >
-                Inquiries
-              </NavLink>
-            </NavItem>
+            {isAdmin ? (
+              <>
+                <NavItem>
+                  <NavLink
+                    className="pointer"
+                    onClick={() => {
+                      navigate("/inquiries");
+                    }}
+                  >
+                    Inquiries
+                  </NavLink>
+                </NavItem>
+              </>
+            ) : (
+              <></>
+            )}
           </Nav>
         </Collapse>
       </Navbar>

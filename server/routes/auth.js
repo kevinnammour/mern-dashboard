@@ -5,8 +5,8 @@ const rfshTokenController = require('../controllers/rfshTokenController');
 const resetPassController = require('../controllers/resetPassController');
 
 router.post("/login", loginController.handleLogin);
-router.post("/logout", logoutController.handleLogout);
-router.post("/refresh", rfshTokenController.handleRefreshToken);
+router.get("/logout", logoutController.handleLogout);
+router.get("/refresh", rfshTokenController.handleRefreshToken);
 router.put("/reset-pass", resetPassController.handleResetPassword);
 
 module.exports = router;

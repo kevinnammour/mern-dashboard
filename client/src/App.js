@@ -19,6 +19,7 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/unauthorized" element={<Page401 />}></Route>
 
+        {/* <Route element={<PreventRfshLogout />}> */}
         <Route element={<RequireAuth allowedRoles={["Admin"]} />}>
           <Route path="/analytics" element={<Analytics />}></Route>
           <Route path="/branches" element={<Branches />}></Route>
@@ -30,6 +31,7 @@ function App() {
           <Route path="/attendances" element={<Attendances />}></Route>
           <Route path="/invoices" element={<Invoices />}></Route>
         </Route>
+        {/* </Route> */}
 
         {/* <Route path="*" element={<Page404 />} /> */}
       </Route>

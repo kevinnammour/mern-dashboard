@@ -45,3 +45,22 @@ $yellow-opacity: #fad85df2;
 .active {
   color: white;
 }
+
+.pointer {
+  cursor: pointer;
+}
+
+.white-color {
+  color: white;
+}
+
+.wrapper {
+  position: relative;
+}
+
+.drop-down {
+  width: 200px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}

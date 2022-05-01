@@ -7,20 +7,10 @@ const bcrypt = require("bcrypt");
  * @param {Response} res response to be returned
  * @returns json object containing the branch if found, and the status code
  */
-const getBranch = async (req, res) => {
-  if (!req?.params?.branchId)
-    return res.status(400).json({ message: "Branch id required." });
-
-  Branch.findOne(
-    { _id: req.params.branchId },
-    "-password -firstLogin -accessToken -refreshToken -createdAt -updatedAt -__v"
-  )
-    .then((branch) => {
-      if (!branch)
-        return res
-          .status(404)
-          .json({ message: `No branch with id = ${req.params.branchId}.` });
-      return res.status(200).json(branch);
+ const getBranches = async (req, res) => {
+  Branch.find({}, "-password -firstLogin -accessToken -refreshToken -createdAt -updatedAt -__v")
+    .then((branches) => {
+      return res.status(200).json(branches);
     })
     .catch((err) => {
       return res.status(500).json({ message: err.message });
@@ -119,7 +109,7 @@ const updateBranchStatus = async (req, res) => {
 };
 
 module.exports = {
-  getBranch,
+  getBranches,
   addBranch,
   updateBranchStatus,
 };

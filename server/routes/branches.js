@@ -4,11 +4,8 @@ const rolesValidator = require("../middlewares/rolesValidator");
 const jwtValidator = require("../middlewares/jwtValidator");
 
 router
-  .route("/:branchId")
-  .get(jwtValidator, rolesValidator("Admin"), branchesController.getBranch);
-
-router
   .route("/")
+  .get(jwtValidator, rolesValidator("Admin"), branchesController.getBranches)
   .post(jwtValidator, rolesValidator("Admin"), branchesController.addBranch)
   .put(
     jwtValidator,
