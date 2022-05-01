@@ -1,12 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Topbar from "../topbar/Topbar";
 import Dropdown from "../dropdown/Dropdown";
+import BranchInfo from "./BranchInfo";
+
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 const baseUrl = "http://localhost:8000";
 
 const Branches = () => {
-  const [branches, setBranches] = useState();
+  const [branch, setBranch] = useState();
+  const [selectedBranchId, setSelectedBranchId] = useState();
   const axiosJWTHolder = useAxiosJWTHolder();
   const navigate = useNavigate();
 
@@ -14,13 +18,15 @@ const Branches = () => {
     let isMounted = true;
     const controller = new AbortController();
 
-    const getBranches = async () => {
+    const getBranch = async () => {
       try {
-        const res = await axiosJWTHolder.get(`${baseUrl}/branches/`, {
-          signal: controller.signal,
-        });
-        console.log(res.data);
-        if (isMounted) setBranches(res.data);
+        const res = await axiosJWTHolder.get(
+          `${baseUrl}/branches/${selectedBranchId}`,
+          {
+            signal: controller.signal,
+          }
+        );
+        if (isMounted) setBranch(res.data);
       } catch (err) {
         if (err?.response?.status === 403) {
           navigate("/login");
@@ -28,18 +34,27 @@ const Branches = () => {
       }
     };
 
-    getBranches();
+    getBranch();
 
     return () => {
       isMounted = false;
       controller.abort();
     };
-  }, []);
+  }, [selectedBranchId]);
 
   return (
     <>
       <Topbar />
-      <Dropdown />
+      <Dropdown setSelectedBranchId={setSelectedBranchId} />
+      <div className="content-wrapper">
+        <BranchInfo
+          branchName={branch?.name}
+          partnerName={branch?.partnerName}
+          percentage={branch?.percentage}
+          phoneNumber={branch?.phoneNumber}
+          active={branch?.active}
+        />
+      </div>
     </>
   );
 };

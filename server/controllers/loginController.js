@@ -85,7 +85,7 @@ const validateCrmUser = async (crmUser, role, password, res) => {
         role,
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "20s" }
+      { expiresIn: "3600s" }
     );
 
     const refreshToken = jwt.sign(
@@ -93,7 +93,7 @@ const validateCrmUser = async (crmUser, role, password, res) => {
         userId: crmUser._id.toString(),
       },
       process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "25s" }
+      { expiresIn: "1d" }
     );
 
     Object.assign(crmUser, { accessToken, refreshToken });
