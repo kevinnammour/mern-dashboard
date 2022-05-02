@@ -67,6 +67,7 @@ const Login = () => {
         return;
       }
     }
+    
     const pass = reset ? newPassword : password;
     try {
       const res = await axios.post(

@@ -3,7 +3,7 @@ const Inquiry = require("../models/Inquiry");
 const getUnsolvedInquiries = async (req, res) => {
   Inquiry.find({ isSolved: false }, "-isSolved -createdAt -updatedAt -__v")
     .then((inquiries) => {
-      return res.status(200).json({ inquiries });
+      return res.status(200).json(inquiries);
     })
     .catch((err) => {
       return res.status(500).json({ message: err.message });

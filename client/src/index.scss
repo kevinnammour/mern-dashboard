@@ -100,3 +100,36 @@ $gray: #9ea5b5;
 .success {
   color: green;
 }
+
+.center-h-v {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 100px);
+  justify-content: center;
+  align-items: center;
+}
+
+.notification-icon {
+  font-size: 100px;
+  color: $dark-blue;
+}
+
+.notification-msg {
+  font-size: 30px;
+  color: $dark-blue;
+}
+
+.inquiries-container {
+  width: calc(100% - 24px);
+  margin: 0 auto;
+}
+
+.inquiry-container {
+  background-color: white;
+  margin: 20px 0px;
+  border-radius: 20px;
+}
+
+.inquiry-icon {
+  font-size: 30px;
+}

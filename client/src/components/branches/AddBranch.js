@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { Form, Button, Modal, Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { axiosJWTHolder } from "../../apis/axiosJWTHolder";
+import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 
 const baseUrl = "http://localhost:8000";
 
@@ -19,6 +19,7 @@ const AddBranch = () => {
   const [usernameMsg, setUsernameMsg] = useState("");
   const [passwordMsg, setPasswordMsg] = useState("");
   const navigate = useNavigate();
+  const axiosJWTHolder = useAxiosJWTHolder();
 
   const addBranch = async (e) => {
     e.preventDefault();
