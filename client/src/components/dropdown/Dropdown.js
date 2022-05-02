@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 const baseUrl = "http://localhost:8000";
 
 const Dropdown = (props) => {
@@ -9,6 +9,7 @@ const Dropdown = (props) => {
   const [selected, setSelected] = useState("");
   const axiosJWTHolder = useAxiosJWTHolder();
   const navigate = useNavigate();
+
 
   useEffect(() => {
     let isMounted = true;
@@ -36,24 +37,26 @@ const Dropdown = (props) => {
   }, []);
 
   return (
-    <div className="wrapper box-shadow-low">
-      <Form.Select
-        className="drop-down"
-        value={selected}
-        onChange={(e) => {
-          setSelected(e.target.value);
-          props.setSelectedBranchId(e.target.value);
-        }}
-      >
-        {branchNames ? (
-          branchNames.map((branchName) => {
-            return <option value={branchName._id}>{branchName.name}</option>;
-          })
-        ) : (
-          <></>
-        )}
-      </Form.Select>
-    </div>
+    <Form.Select
+      className="drop-down"
+      value={selected}
+      onChange={(e) => {
+        setSelected(e.target.value);
+        props.setSelectedBranchId(e.target.value);
+      }}
+    >
+      {branchNames ? (
+        branchNames.map((branchName) => {
+          return (
+            <option key={branchName._id} value={branchName._id}>
+              {branchName.name}
+            </option>
+          );
+        })
+      ) : (
+        <></>
+      )}
+    </Form.Select>
   );
 };
 

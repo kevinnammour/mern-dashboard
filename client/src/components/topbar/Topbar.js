@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import useLogout from "../../hooks/useLogout";
+
 import {
   Collapse,
   Navbar,
@@ -11,14 +13,23 @@ import {
   NavLink,
 } from "reactstrap";
 
-const Topbar = (props) => {
+const Topbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const url = location.pathname.substring(1);
+
+  const logout = useLogout();
+
+  const signOut = async () => {
+    await logout();
+    navigate("/login");
+  };
 
   const toggle = () => setIsOpen(!isOpen);
 
   const { auth } = useAuth();
-  const isAdmin = auth.role === "Admin";
+  const isAdmin = auth?.role === "Admin";
 
   return (
     <div>
@@ -31,7 +42,7 @@ const Topbar = (props) => {
               <>
                 <NavItem>
                   <NavLink
-                    className="pointer"
+                    className={`pointer ${url === "analytics" ? "active" : ""}`}
                     onClick={() => {
                       navigate("/analytics");
                     }}
@@ -41,7 +52,7 @@ const Topbar = (props) => {
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    className="pointer"
+                    className={`pointer ${url === "branches" ? "active" : ""}`}
                     onClick={() => {
                       navigate("/branches");
                     }}
@@ -55,7 +66,7 @@ const Topbar = (props) => {
             )}
             <NavItem>
               <NavLink
-                className="pointer"
+                className={`pointer ${url === "students" ? "active" : ""}`}
                 onClick={() => {
                   navigate("/students");
                 }}
@@ -65,7 +76,7 @@ const Topbar = (props) => {
             </NavItem>
             <NavItem>
               <NavLink
-                className="pointer"
+                className={`pointer ${url === "invoices" ? "active" : ""}`}
                 onClick={() => {
                   navigate("/invoices");
                 }}
@@ -75,7 +86,7 @@ const Topbar = (props) => {
             </NavItem>
             <NavItem>
               <NavLink
-                className="pointer"
+                className={`pointer ${url === "attendances" ? "active" : ""}`}
                 onClick={() => {
                   navigate("/attendances");
                 }}
@@ -87,7 +98,7 @@ const Topbar = (props) => {
               <>
                 <NavItem>
                   <NavLink
-                    className="pointer"
+                    className={`pointer ${url === "inquiries" ? "active" : ""}`}
                     onClick={() => {
                       navigate("/inquiries");
                     }}
@@ -99,6 +110,9 @@ const Topbar = (props) => {
             ) : (
               <></>
             )}
+            <NavItem>
+              <NavLink onClick={signOut}>Logout</NavLink>
+            </NavItem>
           </Nav>
         </Collapse>
       </Navbar>

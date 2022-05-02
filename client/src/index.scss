@@ -1,10 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans&display=swap");
 
 $dark-blue: #29375b;
 $dark-blue-opacity: #29375bde;
 $yellow: #fad85d;
 $yellow-opacity: #fad85df2;
+$gray: #9ea5b5;
 
 * {
   font-family: "DM Sans";
@@ -21,11 +22,6 @@ $yellow-opacity: #fad85df2;
 .btn-custom {
   background-color: $dark-blue !important;
   color: white !important;
-}
-
-.no-outline {
-  outline: none !important;
-  box-shadow: none !important;
 }
 
 .no-border {
@@ -52,10 +48,6 @@ $yellow-opacity: #fad85df2;
   color: red;
 }
 
-.active {
-  color: white;
-}
-
 .pointer {
   cursor: pointer;
 }
@@ -70,13 +62,13 @@ $yellow-opacity: #fad85df2;
   background-color: white;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: flex-end;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 
 .drop-down {
-  width: 220px;
-  position: absolute;
-  right: 12px;
+  width: 180px;
 }
 
 .content-wrapper {

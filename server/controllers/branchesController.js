@@ -125,7 +125,7 @@ const updateBranchStatus = async (req, res) => {
       branch
         .save()
         .then(() => {
-          return res.sendStatus(200);
+          return res.status(200).json(branch);
         })
         .catch((err) => {
           return res.status(500).json({ message: err.message });
