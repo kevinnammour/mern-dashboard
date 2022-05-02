@@ -16,6 +16,8 @@ const AddBranch = () => {
   const [locationUrl, setLocationUrl] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [usernameMsg, setUsernameMsg] = useState("");
+  const [passwordMsg, setPasswordMsg] = useState("");
   const navigate = useNavigate();
 
   const addBranch = async (e) => {
@@ -58,6 +60,9 @@ const AddBranch = () => {
             locationUrl,
           })
           .then(() => {
+            setSuccessMsg(`Branch successfully added.`);
+            setUsernameMsg(`Username: ${username}`);
+            setPasswordMsg(`Password: ${pass}`);
             setUsername("");
             setName("");
             setPhoneNumber("");
@@ -65,7 +70,6 @@ const AddBranch = () => {
             setPercentage("");
             setLocationUrl("");
             setErrMsg("");
-            setSuccessMsg(`Branch successfully added. Password: ${pass}`);
           })
           .catch((err) => {
             if (
@@ -222,12 +226,12 @@ const AddBranch = () => {
                   {successMsg === "" ? (
                     <></>
                   ) : (
-                    <p className="success">{successMsg}</p>
+                    <p className="success bold">{successMsg} <br /> {usernameMsg} <br /> {passwordMsg}</p>
                   )}
                   <Button
                     className="btn-custom no-border float-right"
                     type="submit"
-                    onClick={() => setSuccessMsg("")}
+                    onClick={() => {setSuccessMsg(""); setUsernameMsg(""); setPasswordMsg("");}}
                   >
                     Add branch
                   </Button>
