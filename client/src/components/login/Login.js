@@ -77,7 +77,6 @@ const Login = () => {
           withCredentials: true,
         }
       );
-      console.log(JSON.stringify(res?.data));
       const accessToken = res?.data?.accessToken;
       const role = res?.data?.role;
       setAuth({ username, password, role, accessToken });
@@ -121,7 +120,7 @@ const Login = () => {
             <Form onSubmit={handleSubmit}>
               <p
                 ref={errRef}
-                className={errMessage ? "error" : "display-none"}
+                className={errMessage ? "error" : ""}
                 aria-live="assertive"
               >
                 {errMessage}
@@ -129,7 +128,6 @@ const Login = () => {
               <Form.Group controlId="formBasicEmail">
                 <Form.Label>Username</Form.Label>
                 <Form.Control
-                  className="no-outline"
                   type="text"
                   placeholder="Enter username"
                   ref={userRef}
@@ -143,7 +141,6 @@ const Login = () => {
               <Form.Group controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
-                  className="no-outline"
                   type="password"
                   placeholder="Enter password"
                   onChange={(e) => setPassword(e.target.value)}
@@ -157,7 +154,6 @@ const Login = () => {
                   <Form.Group controlId="formBasicNewPassword">
                     <Form.Label>New Password</Form.Label>
                     <Form.Control
-                      className="no-outline"
                       type="password"
                       placeholder="Enter new password"
                       onChange={(e) => setNewPassword(e.target.value)}

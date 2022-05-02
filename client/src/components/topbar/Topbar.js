@@ -111,7 +111,7 @@ const Topbar = () => {
               <></>
             )}
             <NavItem>
-              <NavLink onClick={signOut}>Logout</NavLink>
+              <NavLink className="pointer" onClick={signOut}>Logout</NavLink>
             </NavItem>
           </Nav>
         </Collapse>

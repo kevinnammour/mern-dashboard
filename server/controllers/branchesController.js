@@ -60,8 +60,9 @@ const addBranch = async (req, res) => {
     !req?.body?.partnerName ||
     !req?.body?.locationUrl ||
     !req?.body?.percentage
-  )
+  ) {
     return res.status(400).json({ message: "Some fields are missing." });
+  }
 
   if (
     !/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(
