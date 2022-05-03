@@ -27,7 +27,7 @@ const handleRefreshToken = async (req, res) => {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "3600s" }
     );
-    return res.status(200).json({ accessToken, role });
+    return res.status(200).json({ _id: crmUser._id, accessToken, role });
   });
 };
 

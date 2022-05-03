@@ -80,7 +80,8 @@ const Login = () => {
       );
       const accessToken = res?.data?.accessToken;
       const role = res?.data?.role;
-      setAuth({ username, password, role, accessToken });
+      const _id = res?.data?._id;
+      setAuth({ username, _id, role, accessToken });
       setUsername("");
       setPassword("");
       setNewPassword("");

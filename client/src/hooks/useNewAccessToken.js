@@ -14,6 +14,7 @@ const useNewAccessToken = () => {
         ...prev,
         accessToken: res.data.accessToken,
         role: res.data.role,
+        _id: res.data._id
       };
     });
     return res.data.accessToken;
