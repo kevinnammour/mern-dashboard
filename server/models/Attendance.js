@@ -2,13 +2,17 @@ const mongoose = require("mongoose");
 
 const attendanceSchema = new mongoose.Schema(
   {
-    branchName: {
+    branchId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "Branch",
     },
     students: {
       type: [mongoose.SchemaTypes.ObjectId],
       ref: "Student",
+    },
+    date: {
+      type: String,
+      required: true,
     },
   },
   {

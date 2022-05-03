@@ -195,7 +195,7 @@ const Students = () => {
                       <td>{student?.registrationDate}</td>
                       <td>{student?.attendanceCount}</td>
                       <td>{student?.certificate?.name}</td>
-                      <td className="pointer">
+                      <td>
                         {student?.active === true ? "Active" : "Inactive"}
                       </td>
                       {auth?.role === "Admin" ? (

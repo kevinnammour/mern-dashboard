@@ -6,9 +6,14 @@ $dark-blue-opacity: #29375bde;
 $yellow: #fad85d;
 $yellow-opacity: #fad85df2;
 $gray: #9ea5b5;
+$bg: #f6f8fa;
 
 * {
   font-family: "DM Sans";
+}
+
+body {
+  background-color: $bg;
 }
 
 .bold {
