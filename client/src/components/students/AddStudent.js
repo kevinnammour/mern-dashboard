@@ -57,6 +57,8 @@ const AddStudent = (props) => {
       } catch (err) {
         if (err?.response?.status === 403 || err?.response?.status === 401) {
           navigate("/login");
+        } else {
+          setErrMsg("Something went wrong. Please try again.");
         }
       }
     }

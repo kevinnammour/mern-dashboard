@@ -255,6 +255,7 @@ const Students = () => {
                         )?.fullName
                       }
                       readOnly
+                      required
                     />
                   </Form.Group>
                   <br />
