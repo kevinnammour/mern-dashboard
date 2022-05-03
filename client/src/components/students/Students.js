@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 import { VscSearchStop } from "react-icons/vsc";
 import useAuth from "../../hooks/useAuth";
-import { MDBCol } from "mdbreact";
+import AddStudent from "./AddStudent";
 const baseUrl = "http://localhost:8000";
 
 const Students = () => {
@@ -143,6 +143,7 @@ const Students = () => {
         ) : (
           <></>
         )}
+        <AddStudent selected={selected} branchStudents={branchStudents} setBranchStudents={setBranchStudents}/>
       </div>
       <div className="students-container">
         <Form.Group controlId="formBasicNewPassword">

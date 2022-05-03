@@ -89,7 +89,22 @@ const addStudent = async (req, res) => {
       student
         .save()
         .then(() => {
-          return res.sendStatus(201);
+          let certificate;
+          if (student.certificates.length > 0) {
+            certificate =
+              student.certificates[
+                Object.keys(student.certificates).length - 1
+              ];
+            delete certificate._doc._id;
+            delete certificate._doc.earnedAt;
+          }
+          delete student._doc.certificates;
+          student._doc.certificate = certificate;
+          delete student._doc.branchId;
+          delete student._doc.__v;
+          delete student._doc.createdAt;
+          delete student._doc.updatedAt;
+          return res.status(201).json(student);
         })
         .catch((err) => {
           return res.status(500).json({ message: err.message });
@@ -110,7 +125,10 @@ const addStudent = async (req, res) => {
  * @returns status code indicating whether the students was updated or not
  */
 const updateStudentStatus = async (req, res) => {
-  if (!req?.body?.studentId || (!req?.body?.active && req.body.active === undefined))
+  if (
+    !req?.body?.studentId ||
+    (!req?.body?.active && req.body.active === undefined)
+  )
     return res.status(400).json({ message: "Student id or status missing." });
 
   Student.findOne({ _id: req.body.studentId })
@@ -123,9 +141,7 @@ const updateStudentStatus = async (req, res) => {
         let certificate;
         if (student.certificates.length > 0) {
           certificate =
-            student.certificates[
-              Object.keys(student.certificates).length - 1
-            ];
+            student.certificates[Object.keys(student.certificates).length - 1];
           delete certificate._doc._id;
           delete certificate._doc.earnedAt;
         }
@@ -165,9 +181,7 @@ const addStudentCertificate = async (req, res) => {
         let certificate;
         if (student.certificates.length > 0) {
           certificate =
-            student.certificates[
-              Object.keys(student.certificates).length - 1
-            ];
+            student.certificates[Object.keys(student.certificates).length - 1];
           delete certificate._doc._id;
           delete certificate._doc.earnedAt;
         }
