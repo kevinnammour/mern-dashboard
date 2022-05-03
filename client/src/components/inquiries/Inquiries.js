@@ -47,7 +47,7 @@ const Inquiries = () => {
     <>
       <Topbar />
       {inquiries && inquiries.length > 0 ? (
-        <div class="d-flex flex-column inquiries-container mt-3">
+        <div className="d-flex flex-column inquiries-container mt-3">
           {inquiries.map((inquiry) => 
             <div class="inquiry-container p-3 box-shadow" key={inquiry._id}>
               {inquiry.type.toLowerCase() === "partnership" ? <FaBusinessTime className="inquiry-icon darkblue-color mb-3" /> : <FaQuestionCircle className="inquiry-icon darkblue-color mb-3" />}

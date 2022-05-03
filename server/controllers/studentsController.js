@@ -39,7 +39,7 @@ const getStudents = async (req, res) => {
             student._doc.certificate = certificate;
             return student;
           });
-          return res.status(200).json({ filteredStudents });
+          return res.status(200).json(filteredStudents);
         })
         .catch((err) => {
           return res.status(500).json({ message: err.message });
@@ -120,7 +120,7 @@ const updateStudentStatus = async (req, res) => {
       }
       student.active = req.body.active;
       student.save().then(() => {
-        return res.sendStatus(200);
+        return res.status(200).json(student);
       });
     })
     .catch((err) => {

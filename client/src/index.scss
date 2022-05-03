@@ -133,3 +133,17 @@ $gray: #9ea5b5;
 .inquiry-icon {
   font-size: 30px;
 }
+
+.students-table {
+  width: calc(100% - 24px);
+  margin: 0 auto;
+}
+
+.actions-cell {
+  display: flex;
+  flex-direction: row;
+}
+
+.nobr {
+  white-space: nowrap;
+}
