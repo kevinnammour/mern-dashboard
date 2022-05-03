@@ -143,86 +143,97 @@ const Students = () => {
         ) : (
           <></>
         )}
-        <AddStudent selected={selected} branchStudents={branchStudents} setBranchStudents={setBranchStudents}/>
+        <AddStudent
+          selected={selected}
+          branchStudents={branchStudents}
+          setBranchStudents={setBranchStudents}
+        />
       </div>
+
       <div className="students-container">
-        <Form.Group controlId="formBasicNewPassword">
-          <Form.Control
-            className="searchbar mt-3"
-            type="text"
-            value={search}
-            placeholder="Search for students..."
-            required
-            onChange={(e) => {
-              setSearch(e.target.value);
-            }}
-          />
-        </Form.Group>
         {branchStudents && branchStudents.length > 0 ? (
-          <Table striped bordered hover responsive className="mt-4">
-            <thead>
-              <tr>
-                <th>Full name</th>
-                <th>Parent's name</th>
-                <th>Phone number</th>
-                <th>Birthdate</th>
-                <th>Registration date</th>
-                <th>Attendance count</th>
-                <th>Latest certificate</th>
-                <th>Status</th>
-                {auth?.role === "Admin" ? <th>Actions</th> : <></>}
-              </tr>
-            </thead>
-            <tbody>
-              {branchStudents
-                .filter((student) =>
-                  student.fullName.toLowerCase().includes(search.toLowerCase())
-                )
-                .map((student) => (
-                  <tr key={student._id}>
-                    <td>{student?.fullName}</td>
-                    <td>{student?.parentName}</td>
-                    <td>{student?.phoneNumber}</td>
-                    <td>{student?.dateOfBirth}</td>
-                    <td>{student?.registrationDate}</td>
-                    <td>{student?.attendanceCount}</td>
-                    <td>{student?.certificate?.name}</td>
-                    <td className="pointer">
-                      {student?.active === true ? "Active" : "Inactive"}
-                    </td>
-                    {auth?.role === "Admin" ? (
-                      <td className="actions-cell">
-                        <Button
-                          data-index={student?._id}
-                          className="btn-custom no-border m-1"
-                          onClick={(e) => {
-                            setShowCertificateModal(true);
-                            setSelectedStudentCertificate(
-                              e.target.getAttribute("data-index")
-                            );
-                          }}
-                        >
-                          Add certificate
-                        </Button>
-                        <Button
-                          data-index={student?._id}
-                          className="btn-custom no-border m-1"
-                          onClick={
-                            student?.active === true
-                              ? (e) => changeStudentStatus(e, false)
-                              : (e) => changeStudentStatus(e, true)
-                          }
-                        >
-                          {student?.active === true ? "Deactivate" : "Activate"}
-                        </Button>
+          <>
+            <Form.Group controlId="formBasicNewPassword">
+              <Form.Control
+                className="searchbar mt-3"
+                type="text"
+                value={search}
+                placeholder="Search for students..."
+                required
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
+              />
+            </Form.Group>
+            <Table striped bordered hover responsive className="mt-4">
+              <thead>
+                <tr>
+                  <th>Full name</th>
+                  <th>Parent's name</th>
+                  <th>Phone number</th>
+                  <th>Birthdate</th>
+                  <th>Registration date</th>
+                  <th>Attendance count</th>
+                  <th>Latest certificate</th>
+                  <th>Status</th>
+                  {auth?.role === "Admin" ? <th>Actions</th> : <></>}
+                </tr>
+              </thead>
+              <tbody>
+                {branchStudents
+                  .filter((student) =>
+                    student.fullName
+                      .toLowerCase()
+                      .includes(search.toLowerCase())
+                  )
+                  .map((student) => (
+                    <tr key={student._id}>
+                      <td>{student?.fullName}</td>
+                      <td>{student?.parentName}</td>
+                      <td>{student?.phoneNumber}</td>
+                      <td>{student?.dateOfBirth}</td>
+                      <td>{student?.registrationDate}</td>
+                      <td>{student?.attendanceCount}</td>
+                      <td>{student?.certificate?.name}</td>
+                      <td className="pointer">
+                        {student?.active === true ? "Active" : "Inactive"}
                       </td>
-                    ) : (
-                      <></>
-                    )}
-                  </tr>
-                ))}
-            </tbody>
-          </Table>
+                      {auth?.role === "Admin" ? (
+                        <td className="actions-cell">
+                          <Button
+                            data-index={student?._id}
+                            className="btn-custom no-border m-1"
+                            onClick={(e) => {
+                              setShowCertificateModal(true);
+                              setSelectedStudentCertificate(
+                                e.target.getAttribute("data-index")
+                              );
+                            }}
+                          >
+                            Add certificate
+                          </Button>
+                          <Button
+                            data-index={student?._id}
+                            className="btn-custom no-border m-1"
+                            onClick={
+                              student?.active === true
+                                ? (e) => changeStudentStatus(e, false)
+                                : (e) => changeStudentStatus(e, true)
+                            }
+                          >
+                            {student?.active === true
+                              ? "Deactivate"
+                              : "Activate"}
+                          </Button>
+                        </td>
+                      ) : (
+                        <></>
+                      )}
+                    </tr>
+                  ))}
+              </tbody>
+            </Table>
+          </>
         ) : (
           <div className="center-h-v">
             <VscSearchStop className="notification-icon" />{" "}
