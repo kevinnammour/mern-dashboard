@@ -1,5 +1,13 @@
 import Topbar from "../topbar/Topbar";
-import { Table, Form, Button, Modal } from "react-bootstrap";
+import {
+  Table,
+  Form,
+  Button,
+  Modal,
+  Container,
+  Row,
+  Col,
+} from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
@@ -11,6 +19,9 @@ const Students = () => {
   const [branches, setBranches] = useState();
   const [branchStudents, setBranchStudents] = useState();
   const [showCertificateModal, setShowCertificateModal] = useState(false);
+  const [selectedStudentCertificate, setSelectedStudentCertificate] =
+    useState("");
+  const [certificate, setCertificate] = useState("");
 
   const axiosJWTHolder = useAxiosJWTHolder();
   const navigate = useNavigate();
@@ -62,6 +73,30 @@ const Students = () => {
         studentId,
         active,
       });
+      const copy = [...branchStudents];
+      let index = copy.findIndex((student) => student._id === studentId);
+      copy[index] = res.data;
+      setBranchStudents(copy);
+    } catch (err) {
+      if (err?.response?.status === 403 || err?.response?.status === 401) {
+        navigate("/login");
+      }
+    }
+  };
+
+  const addCertificate = async () => {
+    const studentId = selectedStudentCertificate;
+    try {
+      const res = await axiosJWTHolder.post(
+        `${baseUrl}/students/add-certificate`,
+        {
+          studentId,
+          certificateName: certificate,
+        }
+      );
+      setCertificate("");
+      setSelectedStudentCertificate("");
+      setShowCertificateModal(false);
       const copy = [...branchStudents];
       let index = copy.findIndex((student) => student._id === studentId);
       copy[index] = res.data;
@@ -135,6 +170,12 @@ const Students = () => {
                   <Button
                     data-index={student?._id}
                     className="btn-custom no-border me-3 nobr"
+                    onClick={(e) => {
+                      setShowCertificateModal(true);
+                      setSelectedStudentCertificate(
+                        e.target.getAttribute("data-index")
+                      );
+                    }}
                   >
                     Add certificate
                   </Button>
@@ -149,43 +190,6 @@ const Students = () => {
                   >
                     {student?.active === true ? "Deactivate" : "Activate"}
                   </Button>
-
-                  <Modal
-                    show={showCertificateModal}
-                    onHide={() => {
-                      setShowCertificateModal(false);
-                    }}
-                  >
-                    <Modal.Header closeButton>
-                      <Modal.Title>Adding certificates</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      Are you sure you want to{" "}
-                      {/* {branchInfo.active === true ? "deactivate" : "activate"}{" "} */}
-                      this branch?
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button
-                        className="no-border"
-                        variant="secondary"
-                        onClick={() => {
-                          // setShowConfirmationModal(false);
-                        }}
-                      >
-                        No, close
-                      </Button>
-                      <Button
-                        className="btn-custom no-border"
-                        variant="primary"
-                        onClick={() => {
-                          // changeBranchStatus();
-                          // setShowConfirmationModal(false);
-                        }}
-                      >
-                        Yes, I am sure
-                      </Button>
-                    </Modal.Footer>
-                  </Modal>
                 </td>
               </tr>
             ))}
@@ -197,6 +201,76 @@ const Students = () => {
           <span className="notification-msg">No students found</span>
         </div>
       )}
+
+      <Modal
+        show={showCertificateModal}
+        onHide={() => {
+          setShowCertificateModal(false);
+        }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Adding certificates</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Container>
+            <Row className="mt-1">
+              <Col>
+                <Form>
+                  <Form.Group controlId="formBasicCertificate">
+                    <Form.Label>Full name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={
+                        branchStudents.find(
+                          (student) =>
+                            student._id === selectedStudentCertificate
+                        )?.fullName
+                      }
+                      readOnly
+                    />
+                  </Form.Group>
+                  <br />
+                  <Form.Group controlId="formBasicCertificate">
+                    <Form.Label>Phone number</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={
+                        branchStudents.find(
+                          (student) =>
+                            student._id === selectedStudentCertificate
+                        )?.phoneNumber
+                      }
+                      readOnly
+                    />
+                  </Form.Group>
+                  <br />
+                  <Form.Group controlId="formBasicCertificate">
+                    <Form.Label>Certificate</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={certificate}
+                      placeholder="e.g. Sixth Sense Robotics Workshop 2"
+                      required
+                      onChange={(e) => setCertificate(e.target.value)}
+                    />
+                  </Form.Group>
+                  <br />
+                  <Button
+                    className="btn-custom no-border float-right"
+                    type="submit"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      addCertificate();
+                    }}
+                  >
+                    Add certificate
+                  </Button>
+                </Form>
+              </Col>
+            </Row>
+          </Container>
+        </Modal.Body>
+      </Modal>
     </>
   );
 };

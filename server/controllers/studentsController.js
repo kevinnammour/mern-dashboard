@@ -27,7 +27,7 @@ const getStudents = async (req, res) => {
             // Extracting the last student certificate instead of sending all certificates
             // and removing attributes that are meaningless in the frontend.
             let certificate;
-            if (student.certificates.length !== 0) {
+            if (student.certificates.length > 0) {
               certificate =
                 student.certificates[
                   Object.keys(student.certificates).length - 1
@@ -120,6 +120,17 @@ const updateStudentStatus = async (req, res) => {
       }
       student.active = req.body.active;
       student.save().then(() => {
+        let certificate;
+        if (student.certificates.length > 0) {
+          certificate =
+            student.certificates[
+              Object.keys(student.certificates).length - 1
+            ];
+          delete certificate._doc._id;
+          delete certificate._doc.earnedAt;
+        }
+        delete student._doc.certificates;
+        student._doc.certificate = certificate;
         return res.status(200).json(student);
       });
     })
@@ -151,7 +162,18 @@ const addStudentCertificate = async (req, res) => {
       });
       student.certificates.push({ name: req.body.certificateName, earnedAt });
       student.save().then(() => {
-        return res.sendStatus(201);
+        let certificate;
+        if (student.certificates.length > 0) {
+          certificate =
+            student.certificates[
+              Object.keys(student.certificates).length - 1
+            ];
+          delete certificate._doc._id;
+          delete certificate._doc.earnedAt;
+        }
+        delete student._doc.certificates;
+        student._doc.certificate = certificate;
+        return res.status(201).json(student);
       });
     })
     .catch((err) => {
