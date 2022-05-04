@@ -1,5 +1,6 @@
 const Attendance = require("../models/Attendance");
 const Branch = require("../models/Branch");
+const Student = require("../models/Student");
 
 /**
  *
@@ -22,7 +23,7 @@ const getAttendanceSheets = async (req, res) => {
         { branchId: req.params.branchId },
         "-branchId -createdAt -updatedAt -__v"
       )
-        .then((attendances) => {
+        .then(async (attendances) => {
           var ts = new Date().getTime();
           let date = new Date(ts).toLocaleString("en-US", {
             timeZone: "Asia/Beirut",
@@ -42,6 +43,20 @@ const getAttendanceSheets = async (req, res) => {
                 return attendance;
             }
           });
+          // Adding students information in each sheet
+          const promise = filteredAttendances.map(async (sheet) => {
+            studentsSheet = sheet.students;
+            delete sheet._doc.students;
+            if(studentsSheet.length > 0) {
+              sheet._doc.students = [];
+              for(let studentId of studentsSheet) {
+                await Student.findOne({_id: studentId}, "fullName phoneNumber").then((student) => {
+                  sheet._doc.students.push(student);
+                })
+              }
+            }
+          });
+          await Promise.all(promise);
           return res.status(200).json(filteredAttendances);
         })
         .catch((err) => {

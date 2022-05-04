@@ -3,7 +3,6 @@ import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-const baseUrl = "http://localhost:8000";
 
 const AddStudent = (props) => {
   const navigate = useNavigate();
@@ -36,7 +35,7 @@ const AddStudent = (props) => {
     } else {
       setErrMsg(null);
       try {
-        const res = await axiosJWTHolder.post(`${baseUrl}/students/`, {
+        const res = await axiosJWTHolder.post(`/students/`, {
           fullName,
           parentName,
           phoneNumber,

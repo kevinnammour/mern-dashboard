@@ -14,7 +14,6 @@ import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 import { VscSearchStop } from "react-icons/vsc";
 import useAuth from "../../hooks/useAuth";
 import AddStudent from "./AddStudent";
-const baseUrl = "http://localhost:8000";
 
 const Students = () => {
   const [selected, setSelected] = useState("");
@@ -33,7 +32,7 @@ const Students = () => {
   useEffect(() => {
     const getBranches = async () => {
       try {
-        const res = await axiosJWTHolder.get(`${baseUrl}/branches/names`);
+        const res = await axiosJWTHolder.get(`/branches/names`);
         let rabieh = res?.data.find(
           (branch) => branch.name.toLowerCase() === "rabieh"
         );
@@ -61,7 +60,7 @@ const Students = () => {
       try {
         if (selected !== "") {
           const res = await axiosJWTHolder.get(
-            `${baseUrl}/students/${selected}`
+            `/students/${selected}`
           );
           setBranchStudents(res.data);
         }
@@ -77,7 +76,7 @@ const Students = () => {
   const changeStudentStatus = async (e, active) => {
     const studentId = e.target.getAttribute("data-index");
     try {
-      const res = await axiosJWTHolder.put(`${baseUrl}/students/set-status`, {
+      const res = await axiosJWTHolder.put(`/students/set-status`, {
         studentId,
         active,
       });
@@ -96,7 +95,7 @@ const Students = () => {
     const studentId = selectedStudentCertificate;
     try {
       const res = await axiosJWTHolder.post(
-        `${baseUrl}/students/add-certificate`,
+        `/students/add-certificate`,
         {
           studentId,
           certificateName: certificate,

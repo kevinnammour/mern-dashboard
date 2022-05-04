@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AddBranch from "./AddBranch";
 import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
-const baseUrl = "http://localhost:8000";
 
 const Branches = () => {
   const [selected, setSelected] = useState("");
@@ -19,7 +18,7 @@ const Branches = () => {
   useEffect(() => {
     const getBranches = async () => {
       try {
-        const res = await axiosJWTHolder.get(`${baseUrl}/branches/names`);
+        const res = await axiosJWTHolder.get(`/branches/names`);
         let rabieh = res?.data.find(
           (branch) => branch.name.toLowerCase() === "rabieh"
         );
@@ -43,7 +42,7 @@ const Branches = () => {
       try {
         if (selected !== "") {
           const res = await axiosJWTHolder.get(
-            `${baseUrl}/branches/${selected}`
+            `/branches/${selected}`
           );
           setBranchInfo(res.data);
         }
@@ -58,7 +57,7 @@ const Branches = () => {
 
   const changeBranchStatus = async () => {
     try {
-      const res = await axiosJWTHolder.put(`${baseUrl}/branches/`, {
+      const res = await axiosJWTHolder.put(`/branches/`, {
         branchId: branchInfo._id,
         active: !branchInfo.active,
       });

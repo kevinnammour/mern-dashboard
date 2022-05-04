@@ -16,6 +16,26 @@ body {
   background-color: $bg;
 }
 
+.fixed-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+@media only screen and (min-width: 979px) {
+  .page-container {
+    margin: 150px auto 0px auto;
+    width: calc(100% - 150px);
+  }
+}
+
+@media only screen and (max-width: 979px) {
+  .page-container {
+    margin: 150px auto 0px auto;
+    width: calc(100% - 24px);
+  }
+}
+
 .bold {
   font-weight: bold;
 }
@@ -68,7 +88,7 @@ body {
 .wrapper {
   position: relative;
   height: 55px;
-  background-color: white;
+  background-color: $bg;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -109,19 +129,18 @@ body {
 .center-h-v {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 100px);
   justify-content: center;
   align-items: center;
-}
 
-.notification-icon {
-  font-size: 100px;
-  color: $dark-blue;
-}
+  .notification-icon {
+    font-size: 60px;
+    color: $dark-blue;
+  }
 
-.notification-msg {
-  font-size: 30px;
-  color: $dark-blue;
+  .notification-msg {
+    font-size: 20px;
+    color: $dark-blue;
+  }
 }
 
 .inquiries-container {
@@ -146,4 +165,19 @@ body {
 
 .searchbar {
   max-width: 300px;
+}
+
+.attendance-sheet-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $bg;
+  box-sizing: border-box;
+  border-radius: 25px;
+  padding: 10px 20px 10px 20px;
+
+  .expand,
+  .collapse {
+    font-size: 20px;
+  }
 }

@@ -4,8 +4,6 @@ import { Form, Button, Modal, Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 
-const baseUrl = "http://localhost:8000";
-
 const AddBranch = () => {
   const [showAddBranchModal, setShowAddBranchModal] = useState(false);
   const [username, setUsername] = useState("");
@@ -51,7 +49,7 @@ const AddBranch = () => {
       setErrMsg(null);
       generatePassword().then((pass) => {
         axiosJWTHolder
-          .post(`${baseUrl}/branches/`, {
+          .post(`/branches/`, {
             username,
             name,
             password: pass,
