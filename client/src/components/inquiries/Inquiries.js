@@ -1,11 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import Topbar from "../topbar/Topbar";
 import { useNavigate } from "react-router-dom";
-import { axiosJWTHolder } from "../../apis/axiosJWTHolder";
 import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
-import { VscSearchStop } from "react-icons/vsc";
-import { FaBusinessTime, FaQuestionCircle } from "react-icons/fa";
-import { Button } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
+import InquiriesTable from "./InquiriesTable";
 
 const Inquiries = () => {
   const [inquiries, setInquiries] = useState();
@@ -13,7 +12,7 @@ const Inquiries = () => {
   const axiosJWTHolder = useAxiosJWTHolder();
 
   useEffect(() => {
-    const getBranches = async () => {
+    const getInquiries = async () => {
       try {
         const res = await axiosJWTHolder.get(`/inquiries/`);
         setInquiries(res.data);
@@ -23,49 +22,23 @@ const Inquiries = () => {
         }
       }
     };
-    getBranches();
+    getInquiries();
   }, []);
-
-  const solveInquiry = async (e) => {
-    const inquiryId = e.target.getAttribute("data-index");
-    try {
-      const res = await axiosJWTHolder.put(`/inquiries/`, {
-        inquiryId
-      });
-      const newInquiries = inquiries.filter(inquiry => inquiry._id !== inquiryId);
-      setInquiries(newInquiries);
-    } catch (err) {
-      if (err?.response?.status === 403 || err?.response?.status === 401) {
-        navigate("/login");
-      }
-    }
-  }
 
   return (
     <>
-      <Topbar />
-      {inquiries && inquiries.length > 0 ? (
-        <div className="d-flex flex-column inquiries-container mt-3">
-          {inquiries.map((inquiry) => 
-            <div className="inquiry-container p-3 box-shadow" key={inquiry._id}>
-              {inquiry.type.toLowerCase() === "partnership" ? <FaBusinessTime className="inquiry-icon darkblue-color mb-3" /> : <FaQuestionCircle className="inquiry-icon darkblue-color mb-3" />}
-              <p className="darkblue-color"><b>Name:</b> {inquiry.fullName}</p>
-              <p className="darkblue-color"><b>Telephone: </b> {inquiry.phoneNumber}</p>
-              <p className="darkblue-color">
-                <b>Message: </b> {inquiry.message}
-              </p>
-              <Button data-index={inquiry._id} onClick={solveInquiry} className="darkblue-bg float-right no-border">
-                Solve
-              </Button>
-            </div>
-          )}
-        </div>
-      ) : (
-        <div className="center-h-v">
-          <VscSearchStop className="notification-icon" />{" "}
-          <span className="notification-msg">No inquiries found</span>
-        </div>
-      )}
+      <div className="fixed-top">
+        <Topbar />
+      </div>
+      <div className="page-container">
+        {inquiries ? (
+          <InquiriesTable inquiries={inquiries} setInquiries={setInquiries} />
+        ) : (
+          <div className="center-h-v">
+            <Spinner className="center-h-v darkblue-color" animation="border" />
+          </div>
+        )}
+      </div>
     </>
   );
 };

@@ -31,16 +31,12 @@ const AttendanceSheet = (props) => {
               </tr>
             </thead>
             <tbody>
-              {props?.sheet?.students && props?.sheet?.students.length > 0 ? (
-                props?.sheet?.students.map((student) => (
-                  <tr key={student._id}>
-                    <td>{student?.fullName}</td>
-                    <td>{student?.phoneNumber}</td>
-                  </tr>
-                ))
-              ) : (
-                <></>
-              )}
+              {props?.sheet?.students?.map((student) => (
+                <tr key={student._id}>
+                  <td>{student?.fullName}</td>
+                  <td>{student?.phoneNumber}</td>
+                </tr>
+              ))}
             </tbody>
           </Table>
         ) : (
