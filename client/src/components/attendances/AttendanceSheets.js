@@ -6,7 +6,6 @@ import { VscSearchStop } from "react-icons/vsc";
 import AttendanceSheet from "./AttendanceSheet";
 
 const AttendanceSheets = (props) => {
-  const [sheets, setSheets] = useState();
   const axiosJWTHolder = useAxiosJWTHolder();
   const navigate = useNavigate();
 
@@ -17,7 +16,7 @@ const AttendanceSheets = (props) => {
           const res = await axiosJWTHolder.get(
             `/attendances/${props.selected}`
           );
-          setSheets(res.data);
+          props?.setSheets(res.data);
         }
       } catch (err) {
         if (err?.response?.status === 403 || err?.response?.status === 401) {
@@ -30,10 +29,10 @@ const AttendanceSheets = (props) => {
 
   return (
     <>
-      {sheets && sheets.length > 0 ? (
+      {props?.sheets && props?.sheets.length > 0 ? (
         <div>
           <h5 className="mb-4">Last 30 days attendance sheets</h5>
-          {sheets.map((sheet) => {
+          {props?.sheets.map((sheet) => {
             return <AttendanceSheet key={sheet._id} sheet={sheet} />;
           })}
         </div>

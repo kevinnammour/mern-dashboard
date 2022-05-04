@@ -39,20 +39,23 @@ const getAttendanceSheets = async (req, res) => {
             var attendanceDay = new Date(attendanceDayStr);
             var difference = Math.abs(today - attendanceDay);
             days = difference / (1000 * 3600 * 24);
-            if(days <= 30) {
-                return attendance;
+            if (days <= 30) {
+              return attendance;
             }
           });
           // Adding students information in each sheet
           const promise = filteredAttendances.map(async (sheet) => {
             studentsSheet = sheet.students;
             delete sheet._doc.students;
-            if(studentsSheet.length > 0) {
+            if (studentsSheet.length > 0) {
               sheet._doc.students = [];
-              for(let studentId of studentsSheet) {
-                await Student.findOne({_id: studentId}, "fullName phoneNumber").then((student) => {
+              for (let studentId of studentsSheet) {
+                await Student.findOne(
+                  { _id: studentId },
+                  "fullName phoneNumber"
+                ).then((student) => {
                   sheet._doc.students.push(student);
-                })
+                });
               }
             }
           });

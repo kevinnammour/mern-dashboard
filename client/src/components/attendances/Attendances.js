@@ -7,6 +7,7 @@ import AddAttendanceSheet from "./AddAttendanceSheet";
 
 const Attendances = () => {
   const [selected, setSelected] = useState("");
+  const [sheets, setSheets] = useState();
   const { auth } = useAuth();
 
   return (
@@ -14,12 +15,20 @@ const Attendances = () => {
       <div className="fixed-top">
         <Topbar />
         <div className="wrapper box-shadow-low">
-          <Dropdown selected={selected} setSelected={setSelected}/>
-          {auth?.role === "Partner" ? <AddAttendanceSheet selected={selected}/> : <AddAttendanceSheet/>}
+          <Dropdown selected={selected} setSelected={setSelected} />
+          {auth?.role === "Partner" ? (
+            <AddAttendanceSheet selected={selected} />
+          ) : (
+            <AddAttendanceSheet sheets={sheets} setSheets={setSheets} />
+          )}
         </div>
       </div>
       <div className="page-container">
-        <AttendanceSheets selected={selected}/>
+        <AttendanceSheets
+          selected={selected}
+          sheets={sheets}
+          setSheets={setSheets}
+        />
       </div>
     </>
   );
