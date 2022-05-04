@@ -67,7 +67,7 @@ const InquiriesTable = (props) => {
       ) : (
         <div className="center-h-v">
           <VscSearchStop className="notification-icon" />
-          <span className="notification-msg">No inquiries found</span>
+          <span className="notification-msg">No inquiries found.</span>
         </div>
       )}
     </>

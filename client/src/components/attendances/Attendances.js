@@ -41,7 +41,11 @@ const Attendances = () => {
         <div className="wrapper box-shadow-low">
           <Dropdown selected={selected} setSelected={setSelected} />
           {auth?.role === "Partner" ? (
-            <AddAttendanceSheet selected={selected} sheets={sheets} setSheets={setSheets}/>
+            <AddAttendanceSheet
+              selected={selected}
+              sheets={sheets}
+              setSheets={setSheets}
+            />
           ) : (
             <></>
           )}

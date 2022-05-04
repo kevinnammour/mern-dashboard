@@ -41,7 +41,7 @@ const AttendanceSheet = (props) => {
           </Table>
         ) : (
           <>
-            <div className="text-center">No students attended this session</div>
+            <div className="text-center">No students attended this session.</div>
           </>
         )
       ) : (
