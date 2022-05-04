@@ -11,8 +11,8 @@ const AttendanceSheet = (props) => {
 
   return (
     <>
-      <div className="attendance-sheet-row box-shadow mb-3">
-        <div>Submitted on {props?.sheet.date}</div>
+      <div className="attendance-sheet-row mb-3">
+        <div>Submitted on {props?.sheet?.date}</div>
         <Button
           data-index={props?.sheet?._id}
           className="btn-custom no-border text-center"
@@ -22,26 +22,32 @@ const AttendanceSheet = (props) => {
         </Button>
       </div>
       {show ? (
-        <Table striped bordered hover responsive className="mt-1">
-          <thead>
-            <tr>
-              <th>Full name</th>
-              <th>Phone number</th>
-            </tr>
-          </thead>
-          <tbody>
-            {props?.sheet?.students ? (
-              props?.sheet?.students.map((student) => (
-                <tr key={student._id}>
-                  <td>{student?.fullName}</td>
-                  <td>{student?.phoneNumber}</td>
-                </tr>
-              ))
-            ) : (
-              <></>
-            )}
-          </tbody>
-        </Table>
+        props?.sheet?.students && props?.sheet?.students?.length > 0 ? (
+          <Table striped bordered hover responsive className="mt-1">
+            <thead>
+              <tr>
+                <th>Full name</th>
+                <th>Phone number</th>
+              </tr>
+            </thead>
+            <tbody>
+              {props?.sheet?.students && props?.sheet?.students.length > 0 ? (
+                props?.sheet?.students.map((student) => (
+                  <tr key={student._id}>
+                    <td>{student?.fullName}</td>
+                    <td>{student?.phoneNumber}</td>
+                  </tr>
+                ))
+              ) : (
+                <></>
+              )}
+            </tbody>
+          </Table>
+        ) : (
+          <>
+            <div className="text-center">No students attended this session</div>
+          </>
+        )
       ) : (
         <></>
       )}

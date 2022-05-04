@@ -1,32 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
-import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
-import { useNavigate } from "react-router-dom";
 import { VscSearchStop } from "react-icons/vsc";
 import AttendanceSheet from "./AttendanceSheet";
 
 const AttendanceSheets = (props) => {
-  const axiosJWTHolder = useAxiosJWTHolder();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const getBranchInformation = async () => {
-      try {
-        if (props.selected !== "") {
-          const res = await axiosJWTHolder.get(
-            `/attendances/${props.selected}`
-          );
-          props?.setSheets(res.data);
-        }
-      } catch (err) {
-        if (err?.response?.status === 403 || err?.response?.status === 401) {
-          navigate("/login");
-        }
-      }
-    };
-    getBranchInformation();
-  }, [props.selected]);
-
   return (
     <>
       {props?.sheets && props?.sheets.length > 0 ? (

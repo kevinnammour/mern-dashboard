@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import { Button, Modal, Table } from "react-bootstrap";
+import { Button, Modal, Table, Spinner } from "react-bootstrap";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 import { useNavigate } from "react-router-dom";
@@ -10,15 +10,16 @@ const AddAttendanceSheet = (props) => {
   const [showAddSheetModal, setShowAttendanceSheetModal] = useState(false);
   const [branchStudents, setBranchStudents] = useState();
   const [errMsg, setErrMsg] = useState("");
-  let presentStudents = [];
   const axiosJWTHolder = useAxiosJWTHolder();
   const navigate = useNavigate();
+  let presentStudents = [];
 
   useEffect(() => {
     const getBranchStudents = async () => {
       try {
-        const res = await axiosJWTHolder.get(`/students/${props?.selected}`);
-        setBranchStudents(res.data);
+        await axiosJWTHolder.get(`/students/${props?.selected}`).then((res) => {
+          setBranchStudents(res.data);
+        });
       } catch (err) {
         if (err?.response?.status === 403 || err?.response?.status === 401) {
           navigate("/login");
@@ -31,21 +32,22 @@ const AddAttendanceSheet = (props) => {
   }, [props?.selected]);
 
   const addSheet = async () => {
-    console.log(presentStudents);
     if (props?.selected !== "") {
       try {
-        const res = await axiosJWTHolder.post(`/attendances/`, {
-          branchId: props?.selected,
-          students: presentStudents,
-        });
-        setErrMsg("");
-        console.log(props?.sheets);
-        // const copy = [...props?.sheets];
-        // copy.push(res.data);
-        // props?.setSheets(copy);
-        // setShowAttendanceSheetModal(false);
+        await axiosJWTHolder
+          .post(`/attendances/`, {
+            branchId: props?.selected,
+            students: presentStudents,
+          })
+          .then((res) => {
+            setErrMsg("");
+            console.log(res.data);
+            const copy = [...props?.sheets];
+            copy.push(res.data);
+            props?.setSheets(copy);
+            setShowAttendanceSheetModal(false);
+          });
       } catch (err) {
-        console.error(err);
         if (err?.response?.status === 403 || err?.response?.status === 401) {
           navigate("/login");
         } else {
@@ -100,40 +102,44 @@ const AddAttendanceSheet = (props) => {
           ) : (
             <></>
           )}
-          {branchStudents && branchStudents.length > 0 ? (
-            <>
-              <Table striped bordered hover responsive className="mt-1">
-                <thead>
-                  <tr>
-                    <th>Full name</th>
-                    <th>Phone number</th>
-                    <th>Attendance</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {branchStudents.map((student) => {
-                    return (
-                      <StudentRow
-                        key={student._id}
-                        student={student}
-                        addStudent={addStudent}
-                      />
-                    );
-                  })}
-                </tbody>
-              </Table>
-              <Button
-                className="btn-custom no-border float-right"
-                onClick={(e) => {
-                  e.preventDefault();
-                  addSheet();
-                }}
-              >
-                Add sheet
-              </Button>
-            </>
+          {branchStudents ? (
+            branchStudents?.length > 0 ? (
+              <>
+                <Table striped bordered hover responsive className="mt-1">
+                  <thead>
+                    <tr>
+                      <th>Full name</th>
+                      <th>Phone number</th>
+                      <th>Attendance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {branchStudents.map((student) => {
+                      return (
+                        <StudentRow
+                          key={student._id}
+                          student={student}
+                          addStudent={addStudent}
+                        />
+                      );
+                    })}
+                  </tbody>
+                </Table>
+                <Button
+                  className="btn-custom no-border float-right"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addSheet();
+                  }}
+                >
+                  Add sheet
+                </Button>
+              </>
+            ) : (
+              <>There are no students in this branch</>
+            )
           ) : (
-            <>There are no students in this branch</>
+            <Spinner className="center-h-v darkblue-color" animation="border" />
           )}
         </Modal.Body>
       </Modal>

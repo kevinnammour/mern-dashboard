@@ -103,11 +103,25 @@ const addAttendanceSheet = async (req, res) => {
       });
       attendance
         .save()
-        .then(() => {
+        .then(async () => {
           delete attendance._doc.branchId;
           delete attendance._doc.__v;
           delete attendance._doc.createdAt;
           delete attendance._doc.updatedAt;
+
+          studentsSheet = attendance.students;
+          delete attendance._doc.students;
+          if (studentsSheet.length > 0) {
+            attendance._doc.students = [];
+            for (let studentId of studentsSheet) {
+              await Student.findOne(
+                { _id: studentId },
+                "fullName phoneNumber"
+              ).then((student) => {
+                attendance._doc.students.push(student);
+              });
+            }
+          }
           return res.status(201).json(attendance);
         })
         .catch((err) => {
