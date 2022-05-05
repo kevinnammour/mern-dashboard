@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { useState } from "react";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { Form, Button, Modal } from "react-bootstrap";
