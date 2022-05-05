@@ -23,7 +23,7 @@ app.use("/branches", require("./routes/branches"));
 app.use("/students", require("./routes/students"));
 app.use("/attendances", require("./routes/attendances"));
 // app.use("/analytics", require("./routes/analytics"));
-// app.use("/invoices", require("./routes/invoices"));
+app.use("/invoices", require("./routes/invoices"));
 
 app.use(errorHandler);
 
