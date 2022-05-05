@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { IoIosAddCircleOutline } from "react-icons/io";
-import { Form, Button, Modal, Container, Row, Col } from "react-bootstrap";
+import { Form, Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 
-const AddBranch = () => {
+const AddBranch = (props) => {
   const [showAddBranchModal, setShowAddBranchModal] = useState(false);
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
@@ -69,6 +69,7 @@ const AddBranch = () => {
             setPercentage("");
             setLocationUrl("");
             setErrMsg("");
+            props?.setForceUpdate(props?.forceUpdate + 1);
           })
           .catch((err) => {
             if (
@@ -145,99 +146,99 @@ const AddBranch = () => {
           <Modal.Title>Adding a branch</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Container>
-            <Row className="mt-1">
-              <Col>
-                <Form onSubmit={addBranch}>
-                  {errMsg ? (
-                    <p className={errMsg ? "error" : ""} aria-live="assertive">
-                      {errMsg}
-                    </p>
-                  ) : (
-                    <></>
-                  )}
-                  <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={username}
-                      placeholder="e.g. berta@ninjaco.partner"
-                      required
-                      onChange={(e) => setUsername(e.target.value)}
-                    />
-                  </Form.Group>
-                  <br />
-                  <Form.Group controlId="formBasicNewPassword">
-                    <Form.Label>Branch name</Form.Label>
-                    <Form.Control
-                      value={name}
-                      type="text"
-                      placeholder="e.g. Jbeil"
-                      required
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                  </Form.Group>
-                  <br />
-                  <Form.Group controlId="formBasicNewPassword">
-                    <Form.Label>Phone number</Form.Label>
-                    <Form.Control
-                      type="tel"
-                      value={phoneNumber}
-                      placeholder="e.g. +96178910121"
-                      required
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                    />
-                  </Form.Group>
-                  <br />
-                  <Form.Group controlId="formBasicNewPassword">
-                    <Form.Label>Partner's name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={partnerName}
-                      placeholder="e.g. Berta Luisella"
-                      required
-                      onChange={(e) => setPartnerName(e.target.value)}
-                    />
-                  </Form.Group>
-                  <br />
-                  <Form.Group controlId="formBasicNewPassword">
-                    <Form.Label>NinjaCo percentage</Form.Label>
-                    <Form.Control
-                      type="number"
-                      value={percentage}
-                      placeholder="e.g. 60"
-                      required
-                      onChange={(e) => setPercentage(e.target.value)}
-                    />
-                  </Form.Group>
-                  <br />
-                  <Form.Group controlId="formBasicNewPassword">
-                    <Form.Label>Location url</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={locationUrl}
-                      placeholder="e.g. https://goo.gl/maps/LzYkAGtjYJWNvMDj6"
-                      required
-                      onChange={(e) => setLocationUrl(e.target.value)}
-                    />
-                  </Form.Group>
-                  <br />
-                  {successMsg === "" ? (
-                    <></>
-                  ) : (
-                    <p className="success bold">{successMsg} <br /> {usernameMsg} <br /> {passwordMsg}</p>
-                  )}
-                  <Button
-                    className="btn-custom no-border float-right"
-                    type="submit"
-                    onClick={() => {setSuccessMsg(""); setUsernameMsg(""); setPasswordMsg("");}}
-                  >
-                    Add branch
-                  </Button>
-                </Form>
-              </Col>
-            </Row>
-          </Container>
+          <Form onSubmit={addBranch}>
+            {errMsg ? (
+              <p className={errMsg ? "error" : ""} aria-live="assertive">
+                {errMsg}
+              </p>
+            ) : (
+              <></>
+            )}
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type="text"
+                value={username}
+                placeholder="e.g. berta@ninjaco.partner"
+                required
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </Form.Group>
+            <br />
+            <Form.Group controlId="formBasicNewPassword">
+              <Form.Label>Branch name</Form.Label>
+              <Form.Control
+                value={name}
+                type="text"
+                placeholder="e.g. Jbeil"
+                required
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Form.Group>
+            <br />
+            <Form.Group controlId="formBasicNewPassword">
+              <Form.Label>Phone number</Form.Label>
+              <Form.Control
+                type="tel"
+                value={phoneNumber}
+                placeholder="e.g. +96178910121"
+                required
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+            </Form.Group>
+            <br />
+            <Form.Group controlId="formBasicNewPassword">
+              <Form.Label>Partner's name</Form.Label>
+              <Form.Control
+                type="text"
+                value={partnerName}
+                placeholder="e.g. Berta Luisella"
+                required
+                onChange={(e) => setPartnerName(e.target.value)}
+              />
+            </Form.Group>
+            <br />
+            <Form.Group controlId="formBasicNewPassword">
+              <Form.Label>NinjaCo percentage</Form.Label>
+              <Form.Control
+                type="number"
+                value={percentage}
+                placeholder="e.g. 60"
+                required
+                onChange={(e) => setPercentage(e.target.value)}
+              />
+            </Form.Group>
+            <br />
+            <Form.Group controlId="formBasicNewPassword">
+              <Form.Label>Location url</Form.Label>
+              <Form.Control
+                type="text"
+                value={locationUrl}
+                placeholder="e.g. https://goo.gl/maps/LzYkAGtjYJWNvMDj6"
+                required
+                onChange={(e) => setLocationUrl(e.target.value)}
+              />
+            </Form.Group>
+            <br />
+            {successMsg === "" ? (
+              <></>
+            ) : (
+              <p className="success bold">
+                {successMsg} <br /> {usernameMsg} <br /> {passwordMsg}
+              </p>
+            )}
+            <Button
+              className="btn-custom no-border float-right"
+              type="submit"
+              onClick={() => {
+                setSuccessMsg("");
+                setUsernameMsg("");
+                setPasswordMsg("");
+              }}
+            >
+              Add branch
+            </Button>
+          </Form>
         </Modal.Body>
       </Modal>
     </>

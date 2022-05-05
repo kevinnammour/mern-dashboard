@@ -35,7 +35,7 @@ const Dropdown = (props) => {
       }
     };
     getBranches();
-  }, []);
+  }, [props?.forceUpdate]);
 
   return (
     <>

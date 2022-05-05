@@ -4,7 +4,6 @@ import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 import { useNavigate } from "react-router-dom";
 
 const EditBranchStatus = (props) => {
-  console.log(props?.branchInfo);
   const [showConfirmationModal, setShowConfirmationModal] = useState();
   const axiosJWTHolder = useAxiosJWTHolder();
   const navigate = useNavigate();

@@ -12,9 +12,10 @@ import BranchInfo from "./BranchInfo";
 const Branches = () => {
   const [selected, setSelected] = useState("");
   const [branchInfo, setBranchInfo] = useState();
+  const [forceUpdate, setForceUpdate] = useState(0);
   const axiosJWTHolder = useAxiosJWTHolder();
   const navigate = useNavigate();
-  const auth = useAuth();
+  const { auth } = useAuth();
 
   useEffect(() => {
     const getBranchInformation = async () => {
@@ -38,8 +39,19 @@ const Branches = () => {
       <div className="fixed-top">
         <Topbar />
         <div className="wrapper box-shadow-low">
-          <Dropdown selected={selected} setSelected={setSelected} />
-          {auth?.role === "Admin" ? <AddBranch /> : <></>}
+          <Dropdown
+            selected={selected}
+            setSelected={setSelected}
+            forceUpdate={forceUpdate}
+          />
+          {auth?.role === "Admin" ? (
+            <AddBranch
+              forceUpdate={forceUpdate}
+              setForceUpdate={setForceUpdate}
+            />
+          ) : (
+            <></>
+          )}
         </div>
       </div>
 
