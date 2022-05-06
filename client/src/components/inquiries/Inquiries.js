@@ -13,14 +13,14 @@ const Inquiries = () => {
 
   useEffect(() => {
     const getInquiries = async () => {
-      try {
-        const res = await axiosJWTHolder.get(`/inquiries/`);
-        setInquiries(res.data);
-      } catch (err) {
-        if (err?.response?.status === 403 || err?.response?.status === 401) {
-          navigate("/login");
-        }
-      }
+      await axiosJWTHolder
+        .get(`/inquiries/`)
+        .then((res) => setInquiries(res.data))
+        .catch((err) => {
+          if (err?.response?.status === 403 || err?.response?.status === 401) {
+            navigate("/login");
+          }
+        });
     };
     getInquiries();
   }, []);

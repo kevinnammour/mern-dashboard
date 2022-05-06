@@ -250,3 +250,7 @@ input:checked + .slider:before {
 td, th, Button {
   white-space: pre;
 }
+
+#chart-line2, #chart-line {
+  background-color: $dark-blue;
+}
