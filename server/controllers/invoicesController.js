@@ -16,7 +16,27 @@ const getInvoices = async (req, res) => {
 
   Invoice.find({ branchId: req.params.branchId }, "-createdAt -updatedAt -__v")
     .then(async (invoices) => {
-      const promise = invoices.map(async (invoice) => {
+      var ts = new Date().getTime();
+      let date = new Date(ts).toLocaleString("en-US", {
+        timeZone: "Asia/Beirut",
+      });
+      currDay = date.substring(0, date.indexOf(","));
+      var today = new Date(currDay);
+      const filteredInvoices = invoices.filter((invoice) => {
+        // Removing invoices that are older then 30 days
+        var invoiceDayStr = invoice.datetime.substring(
+          0,
+          invoice.datetime.indexOf(",")
+        );
+        var invoiceDay = new Date(invoiceDayStr);
+        var difference = Math.abs(today - invoiceDay);
+        days = difference / (1000 * 3600 * 24);
+        if (days <= 30) {
+          return invoice;
+        }
+      });
+
+      const promise = filteredInvoices.map(async (invoice) => {
         await Student.findOne(
           { _id: invoice?.studentId },
           "fullName phoneNumber"
@@ -27,7 +47,7 @@ const getInvoices = async (req, res) => {
         });
       });
       await Promise.all(promise);
-      return res.status(200).json(invoices);
+      return res.status(200).json(filteredInvoices);
     })
     .catch((err) => {
       return res.status(500).json({ message: err.message });
