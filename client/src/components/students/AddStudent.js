@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { Form, Button, Modal, Container, Row, Col } from "react-bootstrap";
 import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 import { IoIosAddCircleOutline } from "react-icons/io";
@@ -41,17 +42,17 @@ const AddStudent = (props) => {
           phoneNumber,
           dateOfBirth,
           registrationDate,
-          branchId: props.selected,
+          branchId: props?.selected,
         });
         setFullName("");
         setParentName("");
         setPhoneNumber("");
         setDateOfBirth("");
         setRegistrationDate("");
-        setErrMsg("");
-        const copy = [...props.branchStudents];
+        setErrMsg(null);
+        const copy = [...props?.branchStudents];
         copy.push(res.data);
-        props.setBranchStudents(copy);
+        props?.setBranchStudents(copy);
         setShowAddStudentModal(false);
       } catch (err) {
         if (err?.response?.status === 403 || err?.response?.status === 401) {
@@ -149,8 +150,7 @@ const AddStudent = (props) => {
                   <br />
                   <Button
                     className="btn-custom no-border float-right"
-                    type="submit"
-                  >
+                    type="submit">
                     Add student
                   </Button>
                 </Form>

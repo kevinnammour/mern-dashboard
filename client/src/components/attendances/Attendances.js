@@ -17,7 +17,6 @@ const Attendances = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(sheets);
     const getBranchInformation = async () => {
       try {
         if (selected !== "") {
