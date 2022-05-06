@@ -18,8 +18,11 @@ const Students = () => {
   useEffect(() => {
     const getBranchStudents = async () => {
       try {
-        const res = await axiosJWTHolder.get(`/students/${selected}`);
-        setBranchStudents(res.data);
+        await axiosJWTHolder
+          .get(`/students/${selected}`)
+          .then((res) => {
+            setBranchStudents(res?.data);
+          });
       } catch (err) {
         if (err?.response?.status === 403 || err?.response?.status === 401) {
           navigate("/login");

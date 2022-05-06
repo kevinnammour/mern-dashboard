@@ -15,12 +15,16 @@ const InvoicesTable = (props) => {
         <>
           <div>
             <h5 className="mb-4">Last 30 days invoices</h5>
-            <ConvertRate
-              convert={convert}
-              setConvert={setConvert}
-              branchInvoices={props?.branchInvoices}
-              setBranchInvoices={props?.setBranchInvoices}
-            />
+            {auth?.role === "Admin" ? (
+              <ConvertRate
+                convert={convert}
+                setConvert={setConvert}
+                branchInvoices={props?.branchInvoices}
+                setBranchInvoices={props?.setBranchInvoices}
+              />
+            ) : (
+              <></>
+            )}
             <Table striped bordered hover responsive className="mt-4">
               <thead>
                 <tr>

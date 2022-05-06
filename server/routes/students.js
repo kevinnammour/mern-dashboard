@@ -5,6 +5,15 @@ const jwtValidator = require("../middlewares/jwtValidator");
 const partnerAccessValidator = require("../middlewares/partnerAccessValidator");
 
 router
+  .route("/active/:branchId")
+  .get(
+    jwtValidator,
+    rolesValidator("Admin", "Partner"),
+    partnerAccessValidator("GET"),
+    studentsController.getActiveStudents
+  );
+
+router
   .route("/:branchId")
   .get(
     jwtValidator,

@@ -55,6 +55,60 @@ const getStudents = async (req, res) => {
 
 /**
  *
+ * @param {Request} req includes the params of the request
+ * @param {Response} res response to be returned
+ * @returns the requested students and the status code with appropriate message
+ */
+const getActiveStudents = async (req, res) => {
+  if (!req?.params?.branchId)
+    return res.status(400).json({ message: "Branch id required." });
+  Branch.exists({ _id: req.params.branchId })
+    .then((branchExists) => {
+      if (!branchExists) {
+        // If the id has a correct format, but no branch has that id
+        return res
+          .status(404)
+          .json({ message: `No branch with id = ${req.params.branchId}.` });
+      }
+      Student.find(
+        { branchId: req.params.branchId },
+        "-branchId -createdAt -updatedAt -__v"
+      )
+        .then((students) => {
+          const filteredStudents = students
+            .filter((student) => student.active === true)
+            .map((student) => {
+              // Extracting the last student certificate instead of sending all certificates
+              // and removing attributes that are meaningless in the frontend.
+              let certificate;
+              if (student.certificates.length > 0) {
+                certificate =
+                  student.certificates[
+                    Object.keys(student.certificates).length - 1
+                  ];
+                delete certificate._doc._id;
+                delete certificate._doc.earnedAt;
+              }
+              delete student._doc.certificates;
+              student._doc.certificate = certificate;
+              return student;
+            });
+          return res.status(200).json(filteredStudents);
+        })
+        .catch((err) => {
+          return res.status(500).json({ message: err.message });
+        });
+    })
+    .catch((err) => {
+      // If the id has incorrect format.
+      return res
+        .status(404)
+        .json({ message: `No branch with id = ${req.params.branchId}.` });
+    });
+};
+
+/**
+ *
  * @param {Request} req includes the body of the request
  * @param {Response} res response to be returned
  * @returns status code indicating whether the students was added or not
@@ -197,6 +251,7 @@ const addStudentCertificate = async (req, res) => {
 
 module.exports = {
   getStudents,
+  getActiveStudents,
   addStudent,
   updateStudentStatus,
   addStudentCertificate,

@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 const Invoices = () => {
   const [selected, setSelected] = useState("");
   const [branchInvoices, setBranchInvoices] = useState();
+  const [activeStudents, setActiveStudents] = useState();
   const { auth } = useAuth();
   const axiosJWTHolder = useAxiosJWTHolder();
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const Invoices = () => {
     const getBranchInvoices = async () => {
       try {
         const res = await axiosJWTHolder.get(`/invoices/${selected}`);
-        setBranchInvoices(res.data);
+        setBranchInvoices(res?.data);
       } catch (err) {
         if (err?.response?.status === 403 || err?.response?.status === 401) {
           navigate("/login");
@@ -29,6 +30,23 @@ const Invoices = () => {
     };
     if (selected !== "") {
       getBranchInvoices();
+    }
+  }, [selected]);
+
+  useEffect(() => {
+    const getActiveStudents = async () => {
+      try {
+        await axiosJWTHolder.get(`/students/active/${selected}`).then((res) => {
+          setActiveStudents(res?.data);
+        });
+      } catch (err) {
+        if (err?.response?.status === 403 || err?.response?.status === 401) {
+          navigate("/login");
+        }
+      }
+    };
+    if (selected !== "") {
+      getActiveStudents();
     }
   }, [selected]);
 
@@ -43,6 +61,7 @@ const Invoices = () => {
               selected={selected}
               branchInvoices={branchInvoices}
               setBranchInvoices={setBranchInvoices}
+              activeStudents={activeStudents}
             />
           ) : (
             <></>

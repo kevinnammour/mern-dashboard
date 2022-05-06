@@ -47,7 +47,7 @@ const addInvoice = async (req, res) => {
     !req?.body?.studentId ||
     !req?.body?.branchId
   )
-    res.status(400).json({ message: "Some fields are missing." });
+    return res.status(400).json({ message: "Some fields are missing." });
 
   await Student.findOne({ _id: req.body.studentId }, "fullName phoneNumber")
     .then((student) => {

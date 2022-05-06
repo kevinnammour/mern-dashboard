@@ -77,86 +77,78 @@ const AddStudent = (props) => {
       <Modal
         show={showAddStudentModal}
         onHide={() => {
-            setShowAddStudentModal(false);
+          setShowAddStudentModal(false);
         }}
       >
         <Modal.Header closeButton>
           <Modal.Title>Adding a student</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Container>
-            <Row className="mt-1">
-              <Col>
-                <Form onSubmit={addStudent}>
-                  {errMsg ? (
-                    <p className={errMsg ? "error" : ""} aria-live="assertive">
-                      {errMsg}
-                    </p>
-                  ) : (
-                    <></>
-                  )}
-                  <Form.Group controlId="formBasicFullName">
-                    <Form.Label>Full name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={fullName}
-                      placeholder="e.g. Berta Kai"
-                      required
-                      onChange={(e) => setFullName(e.target.value)}
-                    />
-                  </Form.Group>
-                  <br />
-                  <Form.Group controlId="formBasicParentName">
-                    <Form.Label>Parent's name</Form.Label>
-                    <Form.Control
-                      value={parentName}
-                      type="text"
-                      placeholder="e.g. Robert Zain"
-                      required
-                      onChange={(e) => setParentName(e.target.value)}
-                    />
-                  </Form.Group>
-                  <br />
-                  <Form.Group controlId="formBasicPhoneNumber">
-                    <Form.Label>Phone number</Form.Label>
-                    <Form.Control
-                      type="tel"
-                      value={phoneNumber}
-                      placeholder="e.g. +96178910121"
-                      required
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                    />
-                  </Form.Group>
-                  <br />
-                  <Form.Group controlId="formBasicDOB">
-                    <Form.Label>Birthdate</Form.Label>
-                    <Form.Control
-                      type="date"
-                      value={dateOfBirth}
-                      required
-                      onChange={(e) => setDateOfBirth(e.target.value)}
-                    />
-                  </Form.Group>
-                  <br />
-                  <Form.Group controlId="formBasicDOR">
-                    <Form.Label>Registration date</Form.Label>
-                    <Form.Control
-                      type="date"
-                      value={registrationDate}
-                      required
-                      onChange={(e) => setRegistrationDate(e.target.value)}
-                    />
-                  </Form.Group>
-                  <br />
-                  <Button
-                    className="btn-custom no-border float-right"
-                    type="submit">
-                    Add student
-                  </Button>
-                </Form>
-              </Col>
-            </Row>
-          </Container>
+          <Form onSubmit={addStudent}>
+            {errMsg ? (
+              <p className={errMsg ? "error" : ""} aria-live="assertive">
+                {errMsg}
+              </p>
+            ) : (
+              <></>
+            )}
+            <Form.Group controlId="formBasicFullName">
+              <Form.Label>Full name</Form.Label>
+              <Form.Control
+                type="text"
+                value={fullName}
+                placeholder="e.g. Berta Kai"
+                required
+                onChange={(e) => setFullName(e.target.value)}
+              />
+            </Form.Group>
+            <br />
+            <Form.Group controlId="formBasicParentName">
+              <Form.Label>Parent's name</Form.Label>
+              <Form.Control
+                value={parentName}
+                type="text"
+                placeholder="e.g. Robert Zain"
+                required
+                onChange={(e) => setParentName(e.target.value)}
+              />
+            </Form.Group>
+            <br />
+            <Form.Group controlId="formBasicPhoneNumber">
+              <Form.Label>Phone number</Form.Label>
+              <Form.Control
+                type="tel"
+                value={phoneNumber}
+                placeholder="e.g. +96178910121"
+                required
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+            </Form.Group>
+            <br />
+            <Form.Group controlId="formBasicDOB">
+              <Form.Label>Birthdate</Form.Label>
+              <Form.Control
+                type="date"
+                value={dateOfBirth}
+                required
+                onChange={(e) => setDateOfBirth(e.target.value)}
+              />
+            </Form.Group>
+            <br />
+            <Form.Group controlId="formBasicDOR">
+              <Form.Label>Registration date</Form.Label>
+              <Form.Control
+                type="date"
+                value={registrationDate}
+                required
+                onChange={(e) => setRegistrationDate(e.target.value)}
+              />
+            </Form.Group>
+            <br />
+            <Button className="btn-custom no-border float-right" type="submit">
+              Add student
+            </Button>
+          </Form>
         </Modal.Body>
       </Modal>
     </>
