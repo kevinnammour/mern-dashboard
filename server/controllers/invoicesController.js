@@ -120,10 +120,14 @@ const addInvoice = async (req, res) => {
  * @returns status code indicating whether the invoice was updated or not
  */
 const updateLbpRate = async (req, res) => {
-  if (!req?.body?.invoiceId || !req?.body?.lbpRate)
+  if (!req?.body?.invoiceId || !req?.body?.lbpRate) {
     return res.status(400).json({ message: "Invoice id or lbp rate missing." });
+  }
 
-  Invoice.findOne({ _id: req.body.invoiceId }, "-createdAt -updatedAt -__v -branchId")
+  Invoice.findOne(
+    { _id: req.body.invoiceId },
+    "-createdAt -updatedAt -__v -branchId"
+  )
     .then((invoice) => {
       if (!invoice) {
         return res.status(400).json({ message: "Invoice not found." });

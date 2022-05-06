@@ -65,7 +65,7 @@ const AddCertificate = (props) => {
             ) : (
               <></>
             )}
-            <Form.Group controlId="formBasicCertificate">
+            <Form.Group controlId="formBasicFullname">
               <Form.Label>Full name</Form.Label>
               <Form.Control
                 type="text"
@@ -75,7 +75,7 @@ const AddCertificate = (props) => {
               />
             </Form.Group>
             <br />
-            <Form.Group controlId="formBasicCertificate">
+            <Form.Group controlId="formBasicPhoneNumber">
               <Form.Label>Phone number</Form.Label>
               <Form.Control
                 type="text"

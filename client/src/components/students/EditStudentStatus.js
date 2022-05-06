@@ -9,16 +9,19 @@ const EditStudentStatus = (props) => {
 
   const changeStudentStatus = async () => {
     try {
-      const res = await axiosJWTHolder.put(`/students/set-status`, {
-        studentId: props?.student._id,
-        active: !props?.student.active,
-      });
-      const copy = [...props?.branchStudents];
-      let index = copy.findIndex(
-        (student) => student._id === props?.student._id
-      );
-      copy[index] = res.data;
-      props?.setBranchStudents(copy);
+      await axiosJWTHolder
+        .put(`/students/set-status`, {
+          studentId: props?.student._id,
+          active: !props?.student.active,
+        })
+        .then((res) => {
+          const copy = [...props?.branchStudents];
+          let index = copy.findIndex(
+            (student) => student._id === props?.student._id
+          );
+          copy[index] = res.data;
+          props?.setBranchStudents(copy);
+        });
     } catch (err) {
       if (err?.response?.status === 403 || err?.response?.status === 401) {
         navigate("/login");

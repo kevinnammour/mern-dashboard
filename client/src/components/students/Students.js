@@ -18,17 +18,17 @@ const Students = () => {
   useEffect(() => {
     const getBranchStudents = async () => {
       try {
-        if (selected !== "") {
-          const res = await axiosJWTHolder.get(`/students/${selected}`);
-          setBranchStudents(res.data);
-        }
+        const res = await axiosJWTHolder.get(`/students/${selected}`);
+        setBranchStudents(res.data);
       } catch (err) {
         if (err?.response?.status === 403 || err?.response?.status === 401) {
           navigate("/login");
         }
       }
     };
-    getBranchStudents();
+    if (selected !== "") {
+      getBranchStudents();
+    }
   }, [selected]);
 
   return (
