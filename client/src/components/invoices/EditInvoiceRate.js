@@ -12,28 +12,30 @@ const EditInvoiceRate = (props) => {
 
   const editInvoiceRate = async (e) => {
     e.preventDefault();
-    try {
-      await axiosJWTHolder
-        .put(`/invoices/`, {
-          invoiceId: props?.invoice?._id,
-          lbpRate: rate,
-        })
-        .then((res) => {
-          const copy = [...props?.branchInvoices];
-          let index = copy.findIndex(
-            (invoice) => invoice._id === props?.invoice._id
-          );
-          copy[index] = res.data;
-          setErrMsg(null);
-          setShowRateModal(false);
-        });
-    } catch (err) {
-      if (err?.response?.status === 403 || err?.response?.status === 401) {
-        navigate("/login");
-      } else {
-        setErrMsg("Something went wrong. Please try again.");
-      }
-    }
+    await axiosJWTHolder
+      .put(`/invoices/`, {
+        invoiceId: props?.invoice?._id,
+        lbpRate: rate,
+      })
+      .then((res) => {
+        const copy = [...props?.branchInvoices];
+        let index = copy.findIndex(
+          (invoice) => invoice._id === props?.invoice._id
+        );
+        copy[index] = res.data;
+        copy[index].usdAmount = copy[index]?.amount / copy[index]?.lbpRate;
+        props?.setBranchInvoices(copy);
+        setRate(null);
+        setErrMsg(null);
+        setShowRateModal(false);
+      })
+      .catch((err) => {
+        if (err?.response?.status === 403 || err?.response?.status === 401) {
+          navigate("/login");
+        } else {
+          setErrMsg("Something went wrong. Please try again.");
+        }
+      });
   };
 
   return (
@@ -45,7 +47,7 @@ const EditInvoiceRate = (props) => {
           setShowRateModal(true);
         }}
       >
-        Edit rate
+        <span className="nobr">Edit rate</span>
       </Button>
 
       <Modal

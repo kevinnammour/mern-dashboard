@@ -246,3 +246,7 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+td, th, Button {
+  white-space: pre;
+}

@@ -24,17 +24,18 @@ const AddInvoice = (props) => {
 
   const addInvoice = async (e) => {
     e.preventDefault();
-    let formatedDatetime = datetime
-      .toString()
-      .substring(
-        0,
-        datetime.toString().indexOf(" GMT+0300 (Eastern European Summer Time)")
-      );
+    console.log(
+      new Date(datetime.getTime()).toLocaleString("en-US", {
+        timeZone: "Asia/Beirut",
+      })
+    );
 
     await axiosJWTHolder
       .post(`/invoices/`, {
         amount,
-        datetime: formatedDatetime,
+        datetime: new Date(datetime.getTime()).toLocaleString("en-US", {
+          timeZone: "Asia/Beirut",
+        }),
         studentId,
         branchId: props?.selected,
       })

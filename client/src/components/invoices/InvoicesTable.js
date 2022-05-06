@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { VscSearchStop } from "react-icons/vsc";
 import useAuth from "../../hooks/useAuth";
@@ -9,6 +10,15 @@ const InvoicesTable = (props) => {
   const { auth } = useAuth();
   const [convert, setConvert] = useState(false);
 
+  useEffect(() => {
+    props?.branchInvoices.map((invoice) => {
+      if (invoice.lbpRate !== null) {
+        invoice.usdAmount = invoice.amount / invoice.lbpRate;
+      }
+      return invoice;
+    });
+  }, []);
+
   return (
     <>
       {props?.branchInvoices && props?.branchInvoices.length > 0 ? (
@@ -16,12 +26,7 @@ const InvoicesTable = (props) => {
           <div>
             <h5 className="mb-4">Last 30 days invoices</h5>
             {auth?.role === "Admin" ? (
-              <ConvertRate
-                convert={convert}
-                setConvert={setConvert}
-                branchInvoices={props?.branchInvoices}
-                setBranchInvoices={props?.setBranchInvoices}
-              />
+              <ConvertRate convert={convert} setConvert={setConvert} />
             ) : (
               <></>
             )}
