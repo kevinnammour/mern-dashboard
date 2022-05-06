@@ -1,6 +1,6 @@
 import React from "react";
 import { VscSearchStop } from "react-icons/vsc";
-import { Form, Button } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import EditBranchStatus from "./EditBranchStatus";
 
 const BranchInfo = (props) => {
