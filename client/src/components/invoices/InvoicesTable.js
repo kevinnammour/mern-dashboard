@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Table } from "react-bootstrap";
 import { VscSearchStop } from "react-icons/vsc";
 import useAuth from "../../hooks/useAuth";
+import ConvertRate from "./ConvertRate";
 import EditInvoiceRate from "./EditInvoiceRate";
 
 const InvoicesTable = (props) => {
@@ -13,14 +14,19 @@ const InvoicesTable = (props) => {
       {props?.branchInvoices && props?.branchInvoices.length > 0 ? (
         <>
           <div>
-            <h5 className="mb-4">Invoices</h5>
-            {/* <SearchStudents search={search} setSearch={setSearch} /> */}
+            <h5 className="mb-4">Last 30 days invoices</h5>
+            <ConvertRate
+              convert={convert}
+              setConvert={setConvert}
+              branchInvoices={props?.branchInvoices}
+              setBranchInvoices={props?.setBranchInvoices}
+            />
             <Table striped bordered hover responsive className="mt-4">
               <thead>
                 <tr>
                   <th>Student's full name</th>
                   <th>Student's phone number</th>
-                  <th>Amount</th>
+                  <th>Amount ({convert ? "USD" : "LBP"})</th>
                   <th>Lbp rate</th>
                   <th>Datetime</th>
                   {auth?.role === "Admin" ? <th>Actions</th> : <></>}
@@ -31,7 +37,7 @@ const InvoicesTable = (props) => {
                   <tr key={invoice._id}>
                     <td>{invoice?.student?.fullName}</td>
                     <td>{invoice?.student?.phoneNumber}</td>
-                    <td>{invoice?.amount}</td>
+                    <td>{convert ? invoice?.usdAmount : invoice?.amount}</td>
                     <td>{invoice?.lbpRate}</td>
                     <td>{invoice?.datetime}</td>
                     {auth?.role === "Admin" ? (
