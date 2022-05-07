@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Spinner } from "reactstrap";
 import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 import Topbar from "../topbar/Topbar";
+import AttendingStudents from "./AttendingStudents";
 import BranchesIncome from "./BranchesIncome";
 import TotalIncomeChart from "./TotalIncomeChart";
 
@@ -21,7 +22,7 @@ const Analytics = () => {
       Promise.all([
         axiosJWTHolder.get(`/analytics/total-income`),
         axiosJWTHolder.get(`/analytics/branches-income`),
-        axiosJWTHolder.get(`/analytics/attending-students`)
+        axiosJWTHolder.get(`/analytics/attending-students`),
       ])
         .then(async ([res1, res2, res3]) => {
           var copy = [...res1?.data];
@@ -53,6 +54,8 @@ const Analytics = () => {
             <TotalIncomeChart totalIncome={totalIncome} />
             <br />
             <BranchesIncome branchesIncome={branchesIncome} />
+            <br />
+            <AttendingStudents attendingStudents={attendingStudents} />
           </>
         ) : (
           <div className="center-h-v">
