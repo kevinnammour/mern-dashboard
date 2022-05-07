@@ -12,6 +12,13 @@ const Dropdown = (props) => {
   const { auth } = useAuth();
 
   useEffect(() => {
+    // If the user is an admin, then the dropdown will be set as Rabieh
+    // since it is the main branch. However, if Rabieh is not in the database,
+    // then it will set the first branch in the set of branches received from
+    // the database as the default branch.
+    // But if the user is a partner, the the dropdown has the branch of the partner
+    // but will not be shown to prevent it from being changed and allowing the partner
+    // to see the information of other branches.
     const getBranches = async () => {
       try {
         if (auth?.role === "Admin") {

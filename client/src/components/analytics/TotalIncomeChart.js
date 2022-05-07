@@ -86,8 +86,8 @@ class TotalIncomeChart extends React.Component {
           selection: {
             enabled: true,
             xaxis: {
-              min: new Date("19 Jun 2017").getTime(),
-              max: new Date("14 Aug 2017").getTime(),
+              // min: new Date("19 Jun 2017").getTime(),
+              // max: new Date("14 Aug 2017").getTime(),
             },
             fill: {
               color: "#fff",
@@ -124,24 +124,31 @@ class TotalIncomeChart extends React.Component {
     return (
       <div>
         <h5 className="mb-4">NinjaCo's total income in the last 30 days</h5>
-        <div id="chart-line2">
-          <ReactApexChart
-            className="apex-analytics"
-            options={this.state.options}
-            series={this.state.series}
-            type="line"
-            height={230}
-          />
-        </div>
-        <div id="chart-line">
-          <ReactApexChart
-            className="apex-analytics"
-            options={this.state.optionsLine}
-            series={this.state.seriesLine}
-            type="area"
-            height={130}
-          />
-        </div>
+        {this.state.options.series.data &&
+        this.state.options.series.data.length > 0 ? (
+          <>
+            <div id="chart-line2">
+              <ReactApexChart
+                className="apex-analytics"
+                options={this.state.options}
+                series={this.state.series}
+                type="line"
+                height={230}
+              />
+            </div>
+            <div id="chart-line">
+              <ReactApexChart
+                className="apex-analytics"
+                options={this.state.optionsLine}
+                series={this.state.seriesLine}
+                type="area"
+                height={130}
+              />
+            </div>
+          </>
+        ) : (
+          <>Oops! It appears that NinjaCo does not have any income lately!</>
+        )}
       </div>
     );
   }

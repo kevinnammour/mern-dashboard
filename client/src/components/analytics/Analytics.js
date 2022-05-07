@@ -1,18 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Spinner } from "reactstrap";
-import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 import Topbar from "../topbar/Topbar";
-import AttendingStudents from "./AttendingStudents";
+import { useEffect, useState } from "react";
 import BranchesIncome from "./BranchesIncome";
+import { useNavigate } from "react-router-dom";
 import TotalIncomeChart from "./TotalIncomeChart";
+import AttendingStudents from "./AttendingStudents";
+import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 
 const Analytics = () => {
   const [totalIncome, setTotalIncome] = useState();
   const [branchesIncome, setBranchesIncome] = useState();
   const [attendingStudents, setAttendingStudents] = useState();
   const [render, setRender] = useState(false);
+
   const axiosJWTHolder = useAxiosJWTHolder();
   const navigate = useNavigate();
 
@@ -25,6 +26,9 @@ const Analytics = () => {
         axiosJWTHolder.get(`/analytics/attending-students`),
       ])
         .then(async ([res1, res2, res3]) => {
+          // Converting the dates into timestamps that
+          // will be converted by the apexcharts library
+          // to readable dates
           var copy = [...res1?.data];
           for (let i = 0; i < copy.length; i++) {
             copy[i][0] = new Date(new Date(copy[i][0]).getTime() + 86400000);
@@ -48,13 +52,11 @@ const Analytics = () => {
       <div className="fixed-top">
         <Topbar />
       </div>
-      <div className="page-container">
+      <div className="page-without-sndbar">
         {render ? (
           <>
             <TotalIncomeChart totalIncome={totalIncome} />
-            <br />
             <BranchesIncome branchesIncome={branchesIncome} />
-            <br />
             <AttendingStudents attendingStudents={attendingStudents} />
           </>
         ) : (

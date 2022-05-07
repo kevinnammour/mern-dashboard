@@ -34,7 +34,7 @@ const Topbar = () => {
   return (
     <div>
       <Navbar className="darkblue-bg" dark expand="md">
-        <NavbarBrand href="/">NinjaCo panel</NavbarBrand>
+        <NavbarBrand href="/">NinjaCo Panel</NavbarBrand>
         <NavbarToggler onClick={toggle} animation="false" />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>

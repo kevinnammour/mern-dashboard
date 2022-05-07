@@ -31,9 +31,12 @@ const Branches = () => {
           .then(async ([res1, res2]) => {
             setBranchInfo(res1?.data);
             setBranchIncome(res2?.data);
+            console.log(res1?.data);
+            console.log(res2?.data);
             setRender(true);
           })
           .catch((err) => {
+            console.log(err);
             if (
               err?.response?.status === 403 ||
               err?.response?.status === 401
@@ -71,8 +74,6 @@ const Branches = () => {
         {render ? (
           <>
             <BrancheIncome branchIncome={branchIncome} />
-            <br />
-            <br />
             <BranchInfo branchInfo={branchInfo} setBranchInfo={setBranchInfo} />
           </>
         ) : (

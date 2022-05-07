@@ -54,17 +54,23 @@ class BrancheIncome extends React.Component {
 
   render() {
     return (
-      <div id="total-income-graph">
+      <div className="mt-5">
         <h5 className="mb-4">
-          Branch's income (in Lbp) during the last 6 months
+          Branch's income (in lbp) during the last 6 months
         </h5>
-        <ReactApexChart
-          className="apex"
-          options={this.state.options}
-          series={this.state.series}
-          type="bar"
-          height={350}
-        />
+        {this.state.series.data && this.state.options.data.length > 0 ? (
+          <>
+            <ReactApexChart
+              className="apex"
+              options={this.state.options}
+              series={this.state.series}
+              type="bar"
+              height={350}
+            />
+          </>
+        ) : (
+          <>Oops! It appears that this branch does not have any income lately!</>
+        )}
       </div>
     );
   }

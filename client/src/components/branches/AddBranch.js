@@ -1,3 +1,4 @@
+/* eslint-disable no-lone-blocks */
 /* eslint-disable no-useless-escape */
 import { useState } from "react";
 import { IoIosAddCircleOutline } from "react-icons/io";
@@ -91,6 +92,9 @@ const AddBranch = (props) => {
   };
 
   const generatePassword = async () => {
+    // Generates a password of length 10 that includes
+    // at least one lowercase, one uppercase, one digit,
+    // and one symbol
     const lAlpha = "abcdefghijklmnopqrstuvwxyz";
     const cAlpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const num = "1234567890";
@@ -140,7 +144,12 @@ const AddBranch = (props) => {
       <Modal
         show={showAddBranchModal}
         onHide={() => {
-          setShowAddBranchModal(false);
+          {
+            setSuccessMsg("");
+            setUsernameMsg("");
+            setPasswordMsg("");
+            setShowAddBranchModal(false);
+          }
         }}
       >
         <Modal.Header closeButton>
@@ -215,7 +224,7 @@ const AddBranch = (props) => {
               <Form.Control
                 type="text"
                 value={locationUrl}
-                placeholder="e.g. https://goo.gl/maps/LzYkAGtjYJWNvMDj6"
+                placeholder="e.g. {url}/maps/{place}/{}/@{lat},{long},{*}/data={data}"
                 required
                 onChange={(e) => setLocationUrl(e.target.value)}
               />

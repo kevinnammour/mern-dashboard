@@ -7,7 +7,7 @@ const BranchInfo = (props) => {
   return (
     <>
       {props?.branchInfo ? (
-        <div>
+        <div className="mt-5">
           <h5 className="mb-4">Branch information</h5>
           <Form className="mb-5">
             <Form.Group className="mb-3" controlId="formBasicName">
@@ -38,7 +38,10 @@ const BranchInfo = (props) => {
                 <Form.Control value="Inactive" readOnly />
               )}
             </Form.Group>
-            <EditBranchStatus branchInfo={props?.branchInfo} setBranchInfo={props?.setBranchInfo}/>
+            <EditBranchStatus
+              branchInfo={props?.branchInfo}
+              setBranchInfo={props?.setBranchInfo}
+            />
           </Form>
         </div>
       ) : (

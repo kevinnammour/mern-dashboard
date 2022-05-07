@@ -27,12 +27,20 @@ body {
     margin: 150px auto 0px auto;
     width: calc(100% - 150px);
   }
+  .page-without-sndbar {
+    margin: 100px auto 0px auto;
+    width: calc(100% - 150px);
+  }
 }
 
 @media only screen and (max-width: 979px) {
   .page-container {
     margin: 150px auto 0px auto;
     width: calc(100% - 24px);
+  }
+  .page-without-sndbar {
+    margin: 100px auto 0px auto;
+    width: calc(100% - 14px);
   }
 }
 

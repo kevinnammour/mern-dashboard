@@ -54,15 +54,23 @@ class BranchesIncome extends React.Component {
 
   render() {
     return (
-      <div>
-        <h5 className="mb-4">NinjaCo's branches comparison of last 30 days income</h5>
-        <ReactApexChart
-          className="apex mb-5"
-          options={this.state.options}
-          series={this.state.series}
-          type="bar"
-          height={350}
-        />
+      <div className="mt-5">
+        <h5 className="mb-4">
+          NinjaCo's branches comparison of last 30 days income
+        </h5>
+        {this.state.series.data && this.state.options.data.length > 0 ? (
+          <>
+            <ReactApexChart
+              className="apex mb-5"
+              options={this.state.options}
+              series={this.state.series}
+              type="bar"
+              height={350}
+            />
+          </>
+        ) : (
+          <>Oops! It appears that NinjaCo does not have any income lately!</>
+        )}
       </div>
     );
   }
