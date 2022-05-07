@@ -14,7 +14,7 @@ const AttendanceSheets = (props) => {
       ) : (
         <div className="center-h-v">
           <VscSearchStop className="notification-icon" />
-          <span className="notification-msg">No attendance sheets found</span>
+          <span className="notification-msg">No attendance sheets found!</span>
         </div>
       )}
     </>

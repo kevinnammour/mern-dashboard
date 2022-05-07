@@ -3,7 +3,7 @@ import { Table } from "reactstrap";
 
 const AttendingStudents = (props) => {
   return (
-    <div className="mt-5 mb-4">
+    <div className="mb-4">
       <h5 className="mb-4">Highest attending students</h5>
       {props?.attendingStudents && props?.attendingStudents.length > 0 ? (
         <>

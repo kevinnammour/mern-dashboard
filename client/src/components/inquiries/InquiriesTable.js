@@ -3,6 +3,7 @@ import { VscSearchStop } from "react-icons/vsc";
 import { Table, Button } from "react-bootstrap";
 import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 import { useNavigate } from "react-router-dom";
+import SolveInquiry from "./SolveInquiry";
 
 const InquiriesTable = (props) => {
   const axiosJWTHolder = useAxiosJWTHolder();
@@ -10,22 +11,21 @@ const InquiriesTable = (props) => {
 
   const solveInquiry = async (e) => {
     const inquiryId = e.target.getAttribute("data-index");
-    try {
-      await axiosJWTHolder
-        .put(`/inquiries/`, {
-          inquiryId,
-        })
-        .then(() => {
-          const newInquiries = props?.inquiries?.filter(
-            (inquiry) => inquiry._id !== inquiryId
-          );
-          props?.setInquiries(newInquiries);
-        });
-    } catch (err) {
-      if (err?.response?.status === 403 || err?.response?.status === 401) {
-        navigate("/login");
-      }
-    }
+    await axiosJWTHolder
+      .put(`/inquiries/`, {
+        inquiryId,
+      })
+      .then(() => {
+        const newInquiries = props?.inquiries?.filter(
+          (inquiry) => inquiry._id !== inquiryId
+        );
+        props?.setInquiries(newInquiries);
+      })
+      .catch((err) => {
+        if (err?.response?.status === 403 || err?.response?.status === 401) {
+          navigate("/login");
+        }
+      });
   };
 
   return (
@@ -51,13 +51,10 @@ const InquiriesTable = (props) => {
                   <td>{inquiry?.type}</td>
                   <td>{inquiry?.message}</td>
                   <td>
-                    <Button
-                      data-index={inquiry?._id}
-                      className="btn-custom no-border m-1"
-                      onClick={solveInquiry}
-                    >
-                      Solve
-                    </Button>
+                    <SolveInquiry
+                      inquiry={inquiry}
+                      solveInquiry={solveInquiry}
+                    />
                   </td>
                 </tr>
               ))}
@@ -67,7 +64,7 @@ const InquiriesTable = (props) => {
       ) : (
         <div className="center-h-v">
           <VscSearchStop className="notification-icon" />
-          <span className="notification-msg">No inquiries found.</span>
+          <span className="notification-msg">No inquiries found!</span>
         </div>
       )}
     </>
