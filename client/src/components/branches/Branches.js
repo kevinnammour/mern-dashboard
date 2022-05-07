@@ -23,6 +23,7 @@ const Branches = () => {
   useEffect(() => {
     const getBranchInformation = async () => {
       if (selected !== "") {
+        setRender(false);
         Promise.all([
           axiosJWTHolder.get(`/branches/${selected}`),
           axiosJWTHolder.get(`/analytics/branch-income/${selected}`),
