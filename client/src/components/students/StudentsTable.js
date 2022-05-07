@@ -75,7 +75,7 @@ const StudentsTable = (props) => {
       ) : (
         <div className="center-h-v">
           <VscSearchStop className="notification-icon" />
-          <span className="notification-msg">No students found</span>
+          <span className="notification-msg">No students found!</span>
         </div>
       )}
     </>

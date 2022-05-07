@@ -28,8 +28,7 @@ function App() {
           <Route path="/attendances" element={<Attendances />}></Route>
           <Route path="/invoices" element={<Invoices />}></Route>
         </Route>
-
-        {/* <Route path="*" element={<Page404 />} /> */}
+        
       </Route>
     </Routes>
   );

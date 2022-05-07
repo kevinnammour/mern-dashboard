@@ -41,7 +41,6 @@ const AddAttendanceSheet = (props) => {
           })
           .then((res) => {
             setErrMsg("");
-            console.log(res.data);
             const copy = [...props?.sheets];
             copy.push(res.data);
             props?.setSheets(copy);

@@ -35,15 +35,16 @@ const Invoices = () => {
 
   useEffect(() => {
     const getActiveStudents = async () => {
-      try {
-        await axiosJWTHolder.get(`/students/active/${selected}`).then((res) => {
+      await axiosJWTHolder
+        .get(`/students/active/${selected}`)
+        .then((res) => {
           setActiveStudents(res?.data);
+        })
+        .catch((err) => {
+          if (err?.response?.status === 403 || err?.response?.status === 401) {
+            navigate("/login");
+          }
         });
-      } catch (err) {
-        if (err?.response?.status === 403 || err?.response?.status === 401) {
-          navigate("/login");
-        }
-      }
     };
     if (selected !== "") {
       getActiveStudents();

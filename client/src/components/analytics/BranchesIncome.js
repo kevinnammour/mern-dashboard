@@ -58,7 +58,8 @@ class BranchesIncome extends React.Component {
         <h5 className="mb-4">
           NinjaCo's branches comparison of last 30 days income
         </h5>
-        {this.state.series.data && this.state.options.data.length > 0 ? (
+        {this.state?.series[0]?.data &&
+        this.state?.series[0]?.data?.length > 0 ? (
           <>
             <ReactApexChart
               className="apex mb-5"

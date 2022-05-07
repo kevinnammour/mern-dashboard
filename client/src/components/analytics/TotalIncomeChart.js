@@ -124,8 +124,8 @@ class TotalIncomeChart extends React.Component {
     return (
       <div>
         <h5 className="mb-4">NinjaCo's total income in the last 30 days</h5>
-        {this.state.options.series.data &&
-        this.state.options.series.data.length > 0 ? (
+        {this.state?.options?.series[0]?.data &&
+        this.state?.options?.series[0]?.data?.length > 0 ? (
           <>
             <div id="chart-line2">
               <ReactApexChart

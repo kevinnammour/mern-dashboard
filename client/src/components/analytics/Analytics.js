@@ -36,6 +36,9 @@ const Analytics = () => {
           setTotalIncome(copy);
           setBranchesIncome(res2?.data);
           setAttendingStudents(res3?.data);
+          // console.log(`${res1?.data}`);
+          // console.log(`${res2?.data}`);
+          // console.log(`${res3?.data}`);
           setRender(true);
         })
         .catch((err) => {

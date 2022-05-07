@@ -24,11 +24,6 @@ const AddInvoice = (props) => {
 
   const addInvoice = async (e) => {
     e.preventDefault();
-    console.log(
-      new Date(datetime.getTime()).toLocaleString("en-US", {
-        timeZone: "Asia/Beirut",
-      })
-    );
 
     await axiosJWTHolder
       .post(`/invoices/`, {
