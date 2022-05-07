@@ -1,5 +1,19 @@
 const Invoice = require("../models/Invoice");
 const Branch = require("../models/Branch");
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 const getTotalIncome = async (req, res) => {
   var starter = new Date();
@@ -76,7 +90,7 @@ const getBranchesIncome = async (req, res) => {
           }
         });
         await Promise.all(promise);
-        return res.status(200).json({xAxisCategories, seriesData});
+        return res.status(200).json({ xAxisCategories, seriesData });
       });
     })
     .catch((err) => {
@@ -88,6 +102,53 @@ const getBranchIncome = async (req, res) => {
   if (!req?.params?.branchId) {
     return res.status(400).json({ message: "Branch id required." });
   }
+
+  let xAxisCategories = [];
+  let seriesData = [];
+
+  var today = new Date();
+  var d;
+  var month;
+  var year;
+  for (var i = 5; i > 0; i -= 1) {
+    d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+    month = monthNames[d.getMonth()];
+    year = d.getFullYear();
+    xAxisCategories.push(`${month}, ${year}`);
+    seriesData.push(0);
+  }
+  today = new Date();
+  d = new Date(today.getFullYear(), today.getMonth(), 1);
+  month = monthNames[d.getMonth()];
+  year = d.getFullYear();
+  xAxisCategories.push(`${month}, ${year}`);
+  seriesData.push(0);
+
+  Invoice.find({ branchId: req?.params?.branchId })
+    .then(async (invoices) => {
+      const promise = invoices.map((invoice) => {
+        var invoiceDate = new Date(invoice.datetime);
+        invoiceDate = new Date(
+          invoiceDate.getFullYear(),
+          invoiceDate.getMonth(),
+          1
+        );
+        var monthYear = `${
+          monthNames[invoiceDate.getMonth()]
+        }, ${invoiceDate.getFullYear()}`;
+
+        for (let i = 0; i < xAxisCategories.length; i++) {
+          if (xAxisCategories[i] == monthYear) {
+            seriesData[i] += invoice.amount;
+          }
+        }
+      });
+      await Promise.all(promise);
+      return res.status(200).json({ xAxisCategories, seriesData });
+    })
+    .catch((err) => {
+      return res.status(500).json({ message: err.message });
+    });
 };
 
 module.exports = {

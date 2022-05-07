@@ -20,7 +20,7 @@ router
   );
 
 router
-  .route("/branch-income")
+  .route("/branch-income/:branchId")
   .get(
     jwtValidator,
     rolesValidator("Admin"),
