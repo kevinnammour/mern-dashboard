@@ -138,7 +138,7 @@ const updateBranchStatus = async (req, res) => {
 };
 
 const getBranchLocations = async (req, res) => {
-  Branch.find({}, "locationUrl")
+  Branch.find({}, "locationUrl active _id name")
     .then((locations) => {
       return res.status(200).json(locations);
     })
