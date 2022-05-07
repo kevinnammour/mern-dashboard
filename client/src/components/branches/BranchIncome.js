@@ -48,6 +48,13 @@ class BrancheIncome extends React.Component {
             },
           },
         },
+        yaxis: {
+          labels: {
+            formatter: function (val) {
+              return val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+            },
+          },
+        },
       },
     };
   }
@@ -58,7 +65,8 @@ class BrancheIncome extends React.Component {
         <h5 className="mb-4">
           Branch's income (in lbp) during the last 6 months
         </h5>
-        {this.state.series.data && this.state.options.data.length > 0 ? (
+        {this.state?.series[0]?.data &&
+        this.state.series[0]?.data?.length > 0 ? (
           <>
             <ReactApexChart
               className="apex"
@@ -69,7 +77,9 @@ class BrancheIncome extends React.Component {
             />
           </>
         ) : (
-          <>Oops! It appears that this branch does not have any income lately!</>
+          <>
+            Oops! It appears that this branch does not have any income lately!
+          </>
         )}
       </div>
     );

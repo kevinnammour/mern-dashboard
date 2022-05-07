@@ -64,6 +64,14 @@ class TotalIncomeChart extends React.Component {
           type: "datetime",
         },
         yaxis: {
+          labels: {
+            formatter: function (val) {
+              return (
+                val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") +
+                " lbp"
+              );
+            },
+          },
           min: 0,
           tickAmount: 4,
         },
@@ -114,6 +122,14 @@ class TotalIncomeChart extends React.Component {
           type: "datetime",
         },
         yaxis: {
+          labels: {
+            formatter: function (val) {
+              return (
+                val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") +
+                " lbp"
+              );
+            },
+          },
           tickAmount: 2,
         },
       },
