@@ -9,7 +9,7 @@ const BranchInfo = (props) => {
       {props?.branchInfo ? (
         <div>
           <h5 className="mb-4">Branch information</h5>
-          <Form>
+          <Form className="mb-5">
             <Form.Group className="mb-3" controlId="formBasicName">
               <Form.Label>Branch name</Form.Label>
               <Form.Control value={props?.branchInfo?.name} readOnly />

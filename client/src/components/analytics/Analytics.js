@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Spinner } from "reactstrap";
 import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 import Topbar from "../topbar/Topbar";
@@ -11,6 +12,7 @@ const Analytics = () => {
   const [branchesIncome, setBranchesIncome] = useState();
   const [render, setRender] = useState(false);
   const axiosJWTHolder = useAxiosJWTHolder();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getGraphData = async () => {
@@ -29,7 +31,7 @@ const Analytics = () => {
         })
         .catch((err) => {
           if (err?.response?.status === 403 || err?.response?.status === 401) {
-            setTotalIncome("/login");
+            navigate("/login");
           }
         });
     };

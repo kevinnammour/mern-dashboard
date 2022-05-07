@@ -8,10 +8,13 @@ import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 import Dropdown from "../dropdown/Dropdown";
 import useAuth from "../../hooks/useAuth";
 import BranchInfo from "./BranchInfo";
+import BrancheIncome from "./BranchIncome";
 
 const Branches = () => {
   const [selected, setSelected] = useState("");
   const [branchInfo, setBranchInfo] = useState();
+  const [branchIncome, setBranchIncome] = useState();
+  const [render, setRender] = useState(false);
   const [forceUpdate, setForceUpdate] = useState(0);
   const axiosJWTHolder = useAxiosJWTHolder();
   const navigate = useNavigate();
@@ -19,16 +22,24 @@ const Branches = () => {
 
   useEffect(() => {
     const getBranchInformation = async () => {
-      try {
-        if (selected !== "") {
-          await axiosJWTHolder.get(`/branches/${selected}`).then((res) => {
-            setBranchInfo(res.data);
+      if (selected !== "") {
+        Promise.all([
+          axiosJWTHolder.get(`/branches/${selected}`),
+          axiosJWTHolder.get(`/analytics/branch-income/${selected}`),
+        ])
+          .then(async ([res1, res2]) => {
+            setBranchInfo(res1?.data);
+            setBranchIncome(res2?.data);
+            setRender(true);
+          })
+          .catch((err) => {
+            if (
+              err?.response?.status === 403 ||
+              err?.response?.status === 401
+            ) {
+              navigate("/login");
+            }
           });
-        }
-      } catch (err) {
-        if (err?.response?.status === 403 || err?.response?.status === 401) {
-          navigate("/login");
-        }
       }
     };
     getBranchInformation();
@@ -56,8 +67,13 @@ const Branches = () => {
       </div>
 
       <div className="page-container">
-        {branchInfo ? (
-          <BranchInfo branchInfo={branchInfo} setBranchInfo={setBranchInfo} />
+        {render ? (
+          <>
+            <BrancheIncome branchIncome={branchIncome} />
+            <br />
+            <br />
+            <BranchInfo branchInfo={branchInfo} setBranchInfo={setBranchInfo} />
+          </>
         ) : (
           <div className="center-h-v">
             <Spinner className="center-h-v darkblue-color" animation="border" />
