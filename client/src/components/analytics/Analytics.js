@@ -1,24 +1,32 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { Spinner } from "reactstrap";
 import useAxiosJWTHolder from "../../hooks/useAxiosJWTHolder";
 import Topbar from "../topbar/Topbar";
+import BranchesIncome from "./BranchesIncome";
 import TotalIncomeChart from "./TotalIncomeChart";
 
 const Analytics = () => {
   const [totalIncome, setTotalIncome] = useState();
+  const [branchesIncome, setBranchesIncome] = useState();
+  const [render, setRender] = useState(false);
   const axiosJWTHolder = useAxiosJWTHolder();
 
   useEffect(() => {
-    const getTotalIncome = async () => {
-      await axiosJWTHolder
-        .get(`/analytics/total-income`)
-        .then((res) => {
-          var copy = [...res?.data];
+    const getGraphData = async () => {
+      Promise.all([
+        axiosJWTHolder.get(`/analytics/total-income`),
+        axiosJWTHolder.get(`/analytics/branches-income`),
+      ])
+        .then(async ([res1, res2]) => {
+          var copy = [...res1?.data];
           for (let i = 0; i < copy.length; i++) {
             copy[i][0] = new Date(new Date(copy[i][0]).getTime() + 86400000);
           }
           setTotalIncome(copy);
+          setBranchesIncome(res2?.data);
+          setRender(true);
         })
         .catch((err) => {
           if (err?.response?.status === 403 || err?.response?.status === 401) {
@@ -26,7 +34,7 @@ const Analytics = () => {
           }
         });
     };
-    getTotalIncome();
+    getGraphData();
   }, []);
 
   return (
@@ -35,11 +43,12 @@ const Analytics = () => {
         <Topbar />
       </div>
       <div className="page-container">
-        {totalIncome ? (
-          <TotalIncomeChart
-            totalIncome={totalIncome}
-            setTotalIncome={setTotalIncome}
-          />
+        {render ? (
+          <>
+            <TotalIncomeChart totalIncome={totalIncome} />
+            <br />
+            <BranchesIncome branchesIncome={branchesIncome} />
+          </>
         ) : (
           <div className="center-h-v">
             <Spinner className="center-h-v darkblue-color" animation="border" />

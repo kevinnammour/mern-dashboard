@@ -44,14 +44,16 @@ const getBranchesIncome = async (req, res) => {
   currDay = date.substring(0, date.indexOf(","));
   var today = new Date(currDay);
 
-  let data = [];
+  let xAxisCategories = [];
+  let seriesData = [];
   let branchIds = [];
 
   Branch.find({}, "name")
     .then((branches) => {
       for (let branch of branches) {
         branchIds.push(branch._id);
-        data.push([branch.name, 0]);
+        xAxisCategories.push(branch.name);
+        seriesData.push(0);
       }
       Invoice.find({}, "branchId amount datetime").then(async (invoices) => {
         const promise = invoices.map((invoice) => {
@@ -68,13 +70,13 @@ const getBranchesIncome = async (req, res) => {
           ) {
             for (let i = 0; i < branchIds.length; i++) {
               if (branchIds[i].toString() == invoice.branchId.toString()) {
-                data[i][1] += invoice.amount;
+                seriesData[i] += invoice.amount;
               }
             }
           }
         });
         await Promise.all(promise);
-        return res.status(200).json(data);
+        return res.status(200).json({xAxisCategories, seriesData});
       });
     })
     .catch((err) => {
