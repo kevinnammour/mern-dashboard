@@ -19,14 +19,23 @@ const Invoices = () => {
 
   useEffect(() => {
     const getBranchInvoices = async () => {
-      try {
-        const res = await axiosJWTHolder.get(`/invoices/${selected}`);
-        setBranchInvoices(res?.data);
-      } catch (err) {
-        if (err?.response?.status === 403 || err?.response?.status === 401) {
-          navigate("/login");
-        }
-      }
+      await axiosJWTHolder
+        .get(`/invoices/${selected}`)
+        .then((res) => {
+          var copy = res?.data;
+          copy.map((invoice) => {
+            if (invoice.lbpRate !== null) {
+              invoice.usdAmount = invoice.amount / invoice.lbpRate;
+            }
+            return invoice;
+          });
+          setBranchInvoices(copy);
+        })
+        .catch((err) => {
+          if (err?.response?.status === 403 || err?.response?.status === 401) {
+            navigate("/login");
+          }
+        });
     };
     if (selected !== "") {
       getBranchInvoices();

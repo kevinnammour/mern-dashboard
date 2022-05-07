@@ -51,7 +51,7 @@ class BrancheIncome extends React.Component {
         yaxis: {
           labels: {
             formatter: function (val) {
-              return val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+              return val.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + " lbp";
             },
           },
         },

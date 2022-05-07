@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Table } from "react-bootstrap";
 import { VscSearchStop } from "react-icons/vsc";
 import useAuth from "../../hooks/useAuth";
@@ -9,15 +9,6 @@ import EditInvoiceRate from "./EditInvoiceRate";
 const InvoicesTable = (props) => {
   const { auth } = useAuth();
   const [convert, setConvert] = useState(false);
-
-  useEffect(() => {
-    props?.branchInvoices.map((invoice) => {
-      if (invoice.lbpRate !== null) {
-        invoice.usdAmount = invoice.amount / invoice.lbpRate;
-      }
-      return invoice;
-    });
-  }, []);
 
   return (
     <>
