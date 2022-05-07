@@ -24,7 +24,6 @@ const handleLogout = async (req, res) => {
     .then(() => {
       res.clearCookie("jwt", {
         HttpOnly: true,
-        // secure: true,
         sameSite: "None",
       });
       return res.sendStatus(204);
@@ -32,7 +31,7 @@ const handleLogout = async (req, res) => {
     .catch((err) => {
       return res
         .status(500)
-        .json({ message: "Internal Server Error: Could not save user." });
+        .json({ message: "Internal Server Error: Could not update user refresh token." });
     });
 };
 

@@ -17,6 +17,13 @@ const monthNames = [
   "December",
 ];
 
+/**
+ *
+ * @param {Request} req 
+ * @param {Response} res response to be returned
+ * @returns response including the total income of NinjaCo in each day for the last
+ * 30 days, and a status code
+ */
 const getTotalIncome = async (req, res) => {
   var starter = new Date();
   starter.setDate(starter.getDate() - 29);
@@ -32,7 +39,6 @@ const getTotalIncome = async (req, res) => {
   }
   // data now represents an array filled with [timestamp, 0] values
   // for the last 30 days
-
   Invoice.find({}, "-createdAt -updatedAt -__v")
     .then(async (invoices) => {
       const promise = invoices.map((invoice) => {
@@ -54,6 +60,13 @@ const getTotalIncome = async (req, res) => {
     });
 };
 
+/**
+ *
+ * @param {Request} req 
+ * @param {Response} res response to be returned
+ * @returns response including the total income of each branch of NinjaCo
+ * over the last month
+ */
 const getBranchesIncome = async (req, res) => {
   var ts = new Date().getTime();
   let date = new Date(ts).toLocaleString("en-US", {
@@ -102,6 +115,13 @@ const getBranchesIncome = async (req, res) => {
     });
 };
 
+/**
+ *
+ * @param {Request} req request including the params
+ * @param {Response} res response to be returned
+ * @returns response including the total income of a branch of NinjaCo
+ * over the last six month
+ */
 const getBranchIncome = async (req, res) => {
   if (!req?.params?.branchId) {
     return res.status(400).json({ message: "Branch id required." });
@@ -155,6 +175,12 @@ const getBranchIncome = async (req, res) => {
     });
 };
 
+/**
+ *
+ * @param {Request} req 
+ * @param {Response} res response to be returned
+ * @returns response including students with the highest 5 attendance scores
+ */
 const getHighestAttendingStudents = async (req, res) => {
   Student.find({ attendanceCount: { $gte: 1 } }, "-createdAt -updatedAt -__v")
     .then(async (students) => {
