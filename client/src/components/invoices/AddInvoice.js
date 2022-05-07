@@ -24,31 +24,35 @@ const AddInvoice = (props) => {
 
   const addInvoice = async (e) => {
     e.preventDefault();
-
-    await axiosJWTHolder
-      .post(`/invoices/`, {
-        amount,
-        datetime: new Date(datetime.getTime()).toLocaleString("en-US", {
-          timeZone: "Asia/Beirut",
-        }),
-        studentId,
-        branchId: props?.selected,
-      })
-      .then((res) => {
-        setAmount("");
-        setErrMsg(null);
-        const copy = [...props?.branchInvoices];
-        copy.push(res.data);
-        props?.setBranchInvoices(copy);
-        setShowAddInvoiceModal(false);
-      })
-      .catch((err) => {
-        if (err?.response?.status === 403 || err?.response?.status === 401) {
-          navigate("/login");
-        } else {
-          setErrMsg("Something went wrong. Please try again.");
-        }
-      });
+    if (amount >= 0) {
+      await axiosJWTHolder
+        .post(`/invoices/`, {
+          amount,
+          datetime: new Date(datetime.getTime()).toLocaleString("en-US", {
+            timeZone: "Asia/Beirut",
+          }),
+          studentId,
+          branchId: props?.selected,
+        })
+        .then((res) => {
+          setAmount("");
+          setErrMsg(null);
+          const copy = [...props?.branchInvoices];
+          copy.push(res.data);
+          props?.setBranchInvoices(copy);
+          setShowAddInvoiceModal(false);
+          setErrMsg("");
+        })
+        .catch((err) => {
+          if (err?.response?.status === 403 || err?.response?.status === 401) {
+            navigate("/login");
+          } else {
+            setErrMsg("Something went wrong. Please try again.");
+          }
+        });
+    } else {
+      setErrMsg("Amount should be bigger or equal to 0");
+    }
   };
 
   return (

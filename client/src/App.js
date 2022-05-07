@@ -15,6 +15,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
+        <Route path="/" element={<Login />}></Route>
         <Route path="/login" element={<Login />}></Route>
 
         <Route element={<RequireAuth allowedRoles={["Admin"]} />}>
@@ -28,7 +29,6 @@ function App() {
           <Route path="/attendances" element={<Attendances />}></Route>
           <Route path="/invoices" element={<Invoices />}></Route>
         </Route>
-        
       </Route>
     </Routes>
   );

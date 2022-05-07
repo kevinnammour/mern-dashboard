@@ -12,30 +12,34 @@ const EditInvoiceRate = (props) => {
 
   const editInvoiceRate = async (e) => {
     e.preventDefault();
-    await axiosJWTHolder
-      .put(`/invoices/`, {
-        invoiceId: props?.invoice?._id,
-        lbpRate: rate,
-      })
-      .then((res) => {
-        const copy = [...props?.branchInvoices];
-        let index = copy.findIndex(
-          (invoice) => invoice._id === props?.invoice._id
-        );
-        copy[index] = res.data;
-        copy[index].usdAmount = copy[index]?.amount / copy[index]?.lbpRate;
-        props?.setBranchInvoices(copy);
-        setRate(null);
-        setErrMsg(null);
-        setShowRateModal(false);
-      })
-      .catch((err) => {
-        if (err?.response?.status === 403 || err?.response?.status === 401) {
-          navigate("/login");
-        } else {
-          setErrMsg("Something went wrong. Please try again.");
-        }
-      });
+    if (rate >= 0) {
+      await axiosJWTHolder
+        .put(`/invoices/`, {
+          invoiceId: props?.invoice?._id,
+          lbpRate: rate,
+        })
+        .then((res) => {
+          const copy = [...props?.branchInvoices];
+          let index = copy.findIndex(
+            (invoice) => invoice._id === props?.invoice._id
+          );
+          copy[index] = res.data;
+          copy[index].usdAmount = copy[index]?.amount / copy[index]?.lbpRate;
+          props?.setBranchInvoices(copy);
+          setRate(null);
+          setErrMsg(null);
+          setShowRateModal(false);
+        })
+        .catch((err) => {
+          if (err?.response?.status === 403 || err?.response?.status === 401) {
+            navigate("/login");
+          } else {
+            setErrMsg("Something went wrong. Please try again.");
+          }
+        });
+    } else {
+      setErrMsg("Invoice rate should be positive");
+    }
   };
 
   return (
