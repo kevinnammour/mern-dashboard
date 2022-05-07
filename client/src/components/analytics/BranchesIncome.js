@@ -54,10 +54,10 @@ class BranchesIncome extends React.Component {
 
   render() {
     return (
-      <div id="total-income-graph">
+      <div>
         <h5 className="mb-4">NinjaCo's branches comparison of last 30 days income</h5>
         <ReactApexChart
-          id="barchart-branches-income"
+          className="apex mb-5"
           options={this.state.options}
           series={this.state.series}
           type="bar"

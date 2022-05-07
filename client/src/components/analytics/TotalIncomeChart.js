@@ -122,10 +122,11 @@ class TotalIncomeChart extends React.Component {
 
   render() {
     return (
-      <div id="total-income-graph">
+      <div>
         <h5 className="mb-4">NinjaCo's total income in the last 30 days</h5>
         <div id="chart-line2">
           <ReactApexChart
+            className="apex-analytics"
             options={this.state.options}
             series={this.state.series}
             type="line"
@@ -134,6 +135,7 @@ class TotalIncomeChart extends React.Component {
         </div>
         <div id="chart-line">
           <ReactApexChart
+            className="apex-analytics"
             options={this.state.optionsLine}
             series={this.state.seriesLine}
             type="area"

@@ -16,6 +16,7 @@ const Analytics = () => {
 
   useEffect(() => {
     const getGraphData = async () => {
+      setRender(false);
       Promise.all([
         axiosJWTHolder.get(`/analytics/total-income`),
         axiosJWTHolder.get(`/analytics/branches-income`),
