@@ -18,16 +18,15 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/crm", require("./routes/auth"));
-app.use("/inquiries", require("./routes/inquiries"));
+app.use("/invoices", require("./routes/invoices"));
 app.use("/branches", require("./routes/branches"));
 app.use("/students", require("./routes/students"));
-app.use("/attendances", require("./routes/attendances"));
+app.use("/inquiries", require("./routes/inquiries"));
 app.use("/analytics", require("./routes/analytics"));
-app.use("/invoices", require("./routes/invoices"));
+app.use("/attendances", require("./routes/attendances"));
 
 app.use(errorHandler);
 
-// Making sure the DB connection is successful before connecting to the PORT
 connectDB()
   .then(() => {
     app.listen(PORT, () => {

@@ -8,7 +8,7 @@ const AttendingStudents = (props) => {
       {props?.attendingStudents && props?.attendingStudents.length > 0 ? (
         <>
           <div>
-            <h5 className="mb-4">Highest attending student</h5>
+            <h5 className="mb-4">Highest attending students</h5>
             <Table striped bordered hover responsive className="mt-4">
               <thead>
                 <tr>
