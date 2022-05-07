@@ -1,5 +1,7 @@
 const Invoice = require("../models/Invoice");
 const Branch = require("../models/Branch");
+const Student = require("../models/Student");
+
 const monthNames = [
   "January",
   "February",
@@ -151,8 +153,53 @@ const getBranchIncome = async (req, res) => {
     });
 };
 
+const getHighestAttendingStudents = async (req, res) => {
+  Student.find({ attendanceCount: { $gte: 1 } }, "-createdAt -updatedAt -__v")
+    .then((students) => {
+      const filteredStudents = students.map((student) => {
+        // Extracting the last student certificate instead of sending all certificates
+        // and removing attributes that are meaningless in the frontend.
+        let certificate;
+        if (student.certificates.length > 0) {
+          certificate =
+            student.certificates[Object.keys(student.certificates).length - 1];
+          delete certificate._doc._id;
+          delete certificate._doc.earnedAt;
+        }
+        delete student._doc.certificates;
+        student._doc.certificate = certificate;
+        return student;
+      });
+      filteredStudents.sort(function (a, b) {
+        return a.attendanceCount > b.attendanceCount
+          ? -1
+          : b.attendanceCount > a.attendanceCount
+          ? 1
+          : 0;
+      });
+      let attendingStudents = [];
+      var score = 0;
+      let value = -1;
+      for (let student of filteredStudents) {
+        if (value != student.attendanceCount) {
+          value = student.attendanceCount;
+          score += 1;
+          if (score === 6) {
+            break;
+          }
+        }
+        attendingStudents.push(student);
+      }
+      return res.status(200).json(attendingStudents);
+    })
+    .catch((err) => {
+      return res.status(500).json({ message: err.message });
+    });
+};
+
 module.exports = {
   getTotalIncome,
   getBranchesIncome,
   getBranchIncome,
+  getHighestAttendingStudents,
 };

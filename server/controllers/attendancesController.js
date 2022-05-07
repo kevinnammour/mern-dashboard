@@ -116,9 +116,11 @@ const addAttendanceSheet = async (req, res) => {
             for (let studentId of studentsSheet) {
               await Student.findOne(
                 { _id: studentId },
-                "fullName phoneNumber"
-              ).then((student) => {
+                "fullName phoneNumber attendanceCount"
+              ).then(async (student) => {
+                student.attendanceCount += 1;
                 attendance._doc.students.push(student);
+                await student.save();
               });
             }
           }

@@ -20,6 +20,14 @@ router
   );
 
 router
+  .route("/attending-students")
+  .get(
+    jwtValidator,
+    rolesValidator("Admin"),
+    analyticsController.getHighestAttendingStudents
+  );
+
+router
   .route("/branch-income/:branchId")
   .get(
     jwtValidator,
