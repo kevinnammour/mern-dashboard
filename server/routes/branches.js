@@ -19,6 +19,8 @@ router.get(
   branchesController.getBranchNames
 );
 
+router.get("/locations", branchesController.getBranchLocations);
+
 router.get(
   "/:branchId",
   jwtValidator,

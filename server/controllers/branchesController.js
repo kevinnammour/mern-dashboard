@@ -137,9 +137,20 @@ const updateBranchStatus = async (req, res) => {
     });
 };
 
+const getBranchLocations = async (req, res) => {
+  Branch.find({}, "locationUrl")
+    .then((locations) => {
+      return res.status(200).json(locations);
+    })
+    .catch((err) => {
+      return res.status(500).json({ message: err.message });
+    });
+};
+
 module.exports = {
   getBranchNames,
   getBranch,
   addBranch,
   updateBranchStatus,
+  getBranchLocations,
 };

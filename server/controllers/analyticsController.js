@@ -30,6 +30,8 @@ const getTotalIncome = async (req, res) => {
     starter = new Date(starter.getTime() + 86400000);
     i++;
   }
+  // data now represents an array filled with [timestamp, 0] values
+  // for the last 30 days
 
   Invoice.find({}, "-createdAt -updatedAt -__v")
     .then(async (invoices) => {
