@@ -10,6 +10,7 @@ import TotalIncomeChart from "./TotalIncomeChart";
 const Analytics = () => {
   const [totalIncome, setTotalIncome] = useState();
   const [branchesIncome, setBranchesIncome] = useState();
+  const [attendingStudents, setAttendingStudents] = useState();
   const [render, setRender] = useState(false);
   const axiosJWTHolder = useAxiosJWTHolder();
   const navigate = useNavigate();
@@ -20,14 +21,16 @@ const Analytics = () => {
       Promise.all([
         axiosJWTHolder.get(`/analytics/total-income`),
         axiosJWTHolder.get(`/analytics/branches-income`),
+        axiosJWTHolder.get(`/analytics/attending-students`)
       ])
-        .then(async ([res1, res2]) => {
+        .then(async ([res1, res2, res3]) => {
           var copy = [...res1?.data];
           for (let i = 0; i < copy.length; i++) {
             copy[i][0] = new Date(new Date(copy[i][0]).getTime() + 86400000);
           }
           setTotalIncome(copy);
           setBranchesIncome(res2?.data);
+          setAttendingStudents(res3?.data);
           setRender(true);
         })
         .catch((err) => {

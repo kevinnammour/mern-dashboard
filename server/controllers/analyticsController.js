@@ -155,7 +155,7 @@ const getBranchIncome = async (req, res) => {
 
 const getHighestAttendingStudents = async (req, res) => {
   Student.find({ attendanceCount: { $gte: 1 } }, "-createdAt -updatedAt -__v")
-    .then((students) => {
+    .then(async (students) => {
       const filteredStudents = students.map((student) => {
         // Extracting the last student certificate instead of sending all certificates
         // and removing attributes that are meaningless in the frontend.
@@ -190,6 +190,15 @@ const getHighestAttendingStudents = async (req, res) => {
         }
         attendingStudents.push(student);
       }
+      const promise = attendingStudents.map(async (student) => {
+        await Branch.findOne({ _id: student.branchId }, "name").then(
+          (branch) => {
+            student._doc.branchName = branch.name;
+            delete student._doc.branchId;
+          }
+        );
+      });
+      await Promise.all(promise);
       return res.status(200).json(attendingStudents);
     })
     .catch((err) => {
