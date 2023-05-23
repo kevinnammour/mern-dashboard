@@ -29,7 +29,7 @@ https://user-images.githubusercontent.com/91464861/168468043-97815212-f33e-4a34-
 
 ## About this project
 
-This project is part of the Software Engineering course in the [Lebanese American University](https://www.lau.edu.lb/).
+This project is part of the Software Engineering course at the [Lebanese American University](https://www.lau.edu.lb/).
 
 ## 👨‍💻👩‍💻 Team
 
