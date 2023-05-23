@@ -1,6 +1,6 @@
 # CRM dashboard
 
-This software is a customer relationship management panel in which our a company administers its interactions with different branches across Lebanon, its instructors, and students, typically using data analysis to study and keep track of large amounts of information. In addition to that, a landing page for the company was developed [here](https://github.com/CodeWithAlexander/ninjaco).
+This software is a customer relationship management panel in which NinjaCo administers its interactions with different branches across Lebanon, its instructors, and students, typically using data analysis to study and keep track of large amounts of information. In addition to that, a landing page for the company was developed [here](https://github.com/CodeWithAlexander/ninjaco).
 
 ## ⚡ Stack
 
